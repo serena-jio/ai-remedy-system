@@ -60,39 +60,143 @@
         .stat-card {
             background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
         }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: none;
+            }
+            
+            .mobile-menu.active {
+                display: block;
+            }
+            
+            h1 {
+                font-size: 2rem !important;
+                line-height: 1.2;
+            }
+            
+            h2 {
+                font-size: 1.5rem !important;
+            }
+            
+            h3 {
+                font-size: 1.25rem !important;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem !important;
+            }
+            
+            .nav-link {
+                font-size: 0.875rem;
+                padding: 0.5rem;
+            }
+            
+            .card-hover:hover {
+                transform: none;
+            }
+            
+            /* 优化按钮在移动端的显示 */
+            button {
+                font-size: 1rem !important;
+                padding: 0.75rem 1.5rem !important;
+            }
+            
+            /* 优化表单元素 */
+            select, input[type="range"] {
+                font-size: 16px !important; /* 防止iOS自动缩放 */
+            }
+            
+            /* 优化图表容器 */
+            canvas {
+                max-height: 250px !important;
+            }
+        }
+        
+        /* 汉堡菜单按钮 */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #667eea;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+        
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            
+            .desktop-nav {
+                display: none;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .mobile-nav {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
     <!-- Navigation -->
     <nav class="bg-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+            <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
-                    <i data-lucide="bot" class="w-8 h-8 text-purple-600 mr-3"></i>
-                    <span class="text-xl font-bold text-gray-800">从"转人工"到"智救"成功</span>
+                    <i data-lucide="bot" class="w-6 h-6 sm:w-8 sm:h-8 text-purple-600 mr-2 sm:mr-3"></i>
+                    <span class="text-base sm:text-xl font-bold text-gray-800">从"转人工"到"智救"成功</span>
                 </div>
-                <div class="flex items-center space-x-8">
+                
+                <!-- Desktop Navigation -->
+                <div class="desktop-nav flex items-center space-x-8">
                     <a href="#home" class="nav-link active text-gray-700 hover:text-purple-600 font-medium">首页</a>
                     <a href="#demo" class="nav-link text-gray-700 hover:text-purple-600 font-medium">智能推荐</a>
                     <a href="#timing" class="nav-link text-gray-700 hover:text-purple-600 font-medium">时机计算</a>
                     <a href="#research" class="nav-link text-gray-700 hover:text-purple-600 font-medium">研究发现</a>
                     <a href="#system" class="nav-link text-gray-700 hover:text-purple-600 font-medium">系统架构</a>
                 </div>
+                
+                <!-- Mobile Hamburger Menu -->
+                <div class="hamburger" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="mobile-nav mobile-menu pb-4">
+                <a href="#home" onclick="closeMobileMenu()" class="block py-2 text-gray-700 hover:text-purple-600 font-medium border-b border-gray-200">首页</a>
+                <a href="#demo" onclick="closeMobileMenu()" class="block py-2 text-gray-700 hover:text-purple-600 font-medium border-b border-gray-200">智能推荐</a>
+                <a href="#timing" onclick="closeMobileMenu()" class="block py-2 text-gray-700 hover:text-purple-600 font-medium border-b border-gray-200">时机计算</a>
+                <a href="#research" onclick="closeMobileMenu()" class="block py-2 text-gray-700 hover:text-purple-600 font-medium border-b border-gray-200">研究发现</a>
+                <a href="#system" onclick="closeMobileMenu()" class="block py-2 text-gray-700 hover:text-purple-600 font-medium">系统架构</a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="gradient-bg text-white py-20">
+    <section id="home" class="gradient-bg text-white py-12 sm:py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center fade-in">
-                <h1 class="text-5xl font-bold mb-6">从"转人工"到"智救"成功</h1>
-                <p class="text-xl mb-8 text-purple-100">AI客服智能补救系统 - 基于双螺旋路径模型的服务补救策略</p>
-                <div class="flex justify-center space-x-4">
-                    <button onclick="scrollToSection('demo')" class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-purple-50 transition shadow-lg">
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">从"转人工"到"智救"成功</h1>
+                <p class="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 text-purple-100 hero-subtitle px-4">AI客服智能补救系统 - 基于双螺旋路径模型的服务补救策略</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 px-4">
+                    <button onclick="scrollToSection('demo')" class="bg-white text-purple-600 px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-purple-50 transition shadow-lg w-full sm:w-auto">
                         🎯 立即体验智能推荐
                     </button>
-                    <button onclick="scrollToSection('timing')" class="bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-800 transition">
+                    <button onclick="scrollToSection('timing')" class="bg-purple-700 text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-purple-800 transition w-full sm:w-auto">
                         ⏱️ 时机效果计算
                     </button>
                 </div>

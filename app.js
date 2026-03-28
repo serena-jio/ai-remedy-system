@@ -1,12 +1,28 @@
 // Initialize Lucide icons
 lucide.createIcons();
 
+// Mobile menu toggle
+function toggleMobileMenu() {
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileMenu) {
+        mobileMenu.classList.toggle('active');
+    }
+}
+
+function closeMobileMenu() {
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileMenu) {
+        mobileMenu.classList.remove('active');
+    }
+}
+
 // Smooth scrolling
 function scrollToSection(sectionId) {
     const element = document.getElementById(sectionId);
     if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
     }
+    closeMobileMenu(); // Close mobile menu after navigation
 }
 
 // Navigation active state
