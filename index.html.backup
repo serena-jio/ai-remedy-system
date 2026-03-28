@@ -124,55 +124,6 @@
         </div>
     </section>
 
-    <!-- Interactive Demo -->
-    <section id="demo" class="py-16 bg-gradient-to-br from-purple-50 to-blue-50">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-8">
-                <h2 class="text-4xl font-bold text-gray-800 mb-4">🎯 智能补救策略推荐系统</h2>
-                <p class="text-lg text-gray-600">基于15,000条真实数据训练，准确率92.3%的智能决策引擎</p>
-            </div>
-            
-            <div class="bg-white rounded-xl shadow-2xl p-8 border-t-4 border-purple-600">
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">选择服务失败类型</label>
-                    <select id="failureType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent">
-                        <option value="technical">技术性失败 (理解错误、无法解决问题)</option>
-                        <option value="interaction">互动性失败 (态度冷漠、缺乏关怀)</option>
-                    </select>
-                </div>
-
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">选择用户类型</label>
-                    <select id="userType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent">
-                        <option value="rational">技术理性型 (注重问题解决)</option>
-                        <option value="emotional">情感敏感型 (注重情感互动)</option>
-                        <option value="balanced">平衡务实型 (兼顾能力与情感)</option>
-                        <option value="low">低卷入型 (低情感投入)</option>
-                    </select>
-                </div>
-
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">拟人化程度</label>
-                    <div class="flex items-center space-x-4">
-                        <input type="range" id="anthropomorphism" min="0" max="100" value="50" class="w-full">
-                        <span id="anthropomorphismValue" class="text-gray-700 font-medium">50%</span>
-                    </div>
-                </div>
-
-                <button onclick="generateRecommendation()" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 rounded-lg font-bold text-lg hover:from-purple-700 hover:to-blue-700 transition shadow-lg">
-                    🚀 生成智能推荐
-                </button>
-
-                <div id="recommendation" class="mt-8 hidden">
-                    <div class="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-lg border-l-4 border-purple-600">
-                        <h3 class="text-xl font-bold mb-4 text-gray-800">推荐补救策略</h3>
-                        <div id="recommendationContent"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Research Findings -->
     <section id="research" class="py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -445,9 +396,7 @@
             <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">智能补救决策系统</h2>
             
             <div class="mb-12">
-                <h3 class="text-2xl font-bold text-center mb-6 text-gray-800">TextCNN文本分类模型架构</h3>
-                <img src="architecture-diagram.svg" alt="TextCNN文本分类模型架构图" class="w-full rounded-lg shadow-lg bg-white p-4">
-                <p class="text-center text-gray-600 mt-4">基于卷积神经网络的服务失败类型识别模型，准确率达92.3%</p>
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 600'%3E%3Crect fill='%23f9fafb' width='1200' height='600'/%3E%3Ctext x='600' y='300' font-family='Arial' font-size='24' fill='%23666' text-anchor='middle'%3E系统架构图%3C/text%3E%3C/svg%3E" alt="系统架构" class="w-full rounded-lg shadow-lg">
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -489,6 +438,52 @@
                         <li>• 诊断推理</li>
                         <li>• 反事实分析</li>
                     </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Demo -->
+    <section id="demo" class="py-16 bg-gray-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">智能补救策略推荐演示</h2>
+            
+            <div class="bg-white rounded-lg shadow-xl p-8">
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">选择服务失败类型</label>
+                    <select id="failureType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+                        <option value="technical">技术性失败 (理解错误、无法解决问题)</option>
+                        <option value="interaction">互动性失败 (态度冷漠、缺乏关怀)</option>
+                    </select>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">选择用户类型</label>
+                    <select id="userType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+                        <option value="rational">技术理性型 (注重问题解决)</option>
+                        <option value="emotional">情感敏感型 (注重情感互动)</option>
+                        <option value="balanced">平衡务实型 (兼顾能力与情感)</option>
+                        <option value="low">低卷入型 (低情感投入)</option>
+                    </select>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">拟人化程度</label>
+                    <div class="flex items-center space-x-4">
+                        <input type="range" id="anthropomorphism" min="0" max="100" value="50" class="w-full">
+                        <span id="anthropomorphismValue" class="text-gray-700 font-medium">50%</span>
+                    </div>
+                </div>
+
+                <button onclick="generateRecommendation()" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition">
+                    生成智能推荐
+                </button>
+
+                <div id="recommendation" class="mt-8 hidden">
+                    <div class="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-lg border-l-4 border-purple-600">
+                        <h3 class="text-xl font-bold mb-4 text-gray-800">推荐补救策略</h3>
+                        <div id="recommendationContent"></div>
+                    </div>
                 </div>
             </div>
         </div>

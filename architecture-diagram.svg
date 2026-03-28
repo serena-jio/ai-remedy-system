@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700">
+  <defs>
+    <style>
+      .title { font-family: 'Noto Sans SC', sans-serif; font-size: 28px; font-weight: bold; fill: #333; }
+      .label { font-family: 'Noto Sans SC', sans-serif; font-size: 14px; fill: #333; }
+      .small-label { font-family: 'Noto Sans SC', sans-serif; font-size: 12px; fill: #555; }
+      .box { fill: #e8eaf6; stroke: #5c6bc0; stroke-width: 2; }
+      .highlight-box { fill: #c5cae9; stroke: #3f51b5; stroke-width: 2; }
+      .arrow { stroke: #5c6bc0; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#5c6bc0" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="600" y="40" text-anchor="middle" class="title">文本分类模型架构图</text>
+  
+  <!-- Input Layer -->
+  <rect x="50" y="100" width="180" height="180" class="box" rx="5"/>
+  <text x="140" y="130" text-anchor="middle" class="label" font-weight="bold">嵌入层</text>
+  <text x="140" y="160" text-anchor="middle" class="small-label">使用Word2Vec预训练词向量</text>
+  <text x="140" y="180" text-anchor="middle" class="small-label">词汇量: 500</text>
+  <text x="140" y="200" text-anchor="middle" class="small-label">嵌入维度: 128</text>
+  <text x="140" y="240" text-anchor="middle" class="small-label">高阶词 → 迭代向量表示</text>
+  <text x="140" y="260" text-anchor="middle" class="small-label">捕获语义关系</text>
+  
+  <!-- Input -->
+  <rect x="10" y="150" width="30" height="80" class="box" rx="3"/>
+  <text x="25" y="165" text-anchor="middle" class="small-label">输入</text>
+  <text x="25" y="185" text-anchor="middle" class="small-label" transform="rotate(-90 25 190)">语言词序列</text>
+  
+  <!-- Convolution Layer -->
+  <rect x="280" y="80" width="280" height="220" class="highlight-box" rx="5"/>
+  <text x="420" y="110" text-anchor="middle" class="label" font-weight="bold">卷积层</text>
+  
+  <!-- Conv filters -->
+  <g>
+    <rect x="310" y="130" width="60" height="40" class="box" rx="3"/>
+    <text x="340" y="155" text-anchor="middle" class="small-label">卷积核尺寸: 3</text>
+    <rect x="380" y="130" width="60" height="40" class="box" rx="3"/>
+    <rect x="450" y="130" width="60" height="40" class="box" rx="3"/>
+    <text x="480" y="155" text-anchor="middle" class="small-label">[Batch, L1, 100]</text>
+  </g>
+  
+  <g>
+    <rect x="310" y="180" width="60" height="40" class="box" rx="3"/>
+    <text x="340" y="205" text-anchor="middle" class="small-label">卷积核尺寸: 4</text>
+    <rect x="380" y="180" width="60" height="40" class="box" rx="3"/>
+    <rect x="450" y="180" width="60" height="40" class="box" rx="3"/>
+    <text x="480" y="205" text-anchor="middle" class="small-label">[Batch, L2, 100]</text>
+  </g>
+  
+  <g>
+    <rect x="310" y="230" width="60" height="40" class="box" rx="3"/>
+    <text x="340" y="255" text-anchor="middle" class="small-label">卷积核尺寸: 5</text>
+    <rect x="380" y="230" width="60" height="40" class="box" rx="3"/>
+    <rect x="450" y="230" width="60" height="40" class="box" rx="3"/>
+    <text x="480" y="255" text-anchor="middle" class="small-label">[Batch, L3, 100]</text>
+  </g>
+  
+  <text x="420" y="290" text-anchor="middle" class="small-label">多尺度卷积核提取不同长度局部特征</text>
+  
+  <!-- Pooling Layer -->
+  <rect x="610" y="100" width="140" height="180" class="box" rx="5"/>
+  <text x="680" y="130" text-anchor="middle" class="label" font-weight="bold">池化层</text>
+  
+  <rect x="630" y="150" width="100" height="30" class="highlight-box" rx="3"/>
+  <text x="680" y="170" text-anchor="middle" class="small-label">全局最大池化</text>
+  
+  <rect x="630" y="190" width="100" height="30" class="highlight-box" rx="3"/>
+  <text x="680" y="210" text-anchor="middle" class="small-label">全局最大池化</text>
+  
+  <rect x="630" y="230" width="100" height="30" class="highlight-box" rx="3"/>
+  <text x="680" y="250" text-anchor="middle" class="small-label">全局最大池化</text>
+  
+  <text x="680" y="270" text-anchor="middle" class="small-label">[Batch, 300]</text>
+  
+  <!-- Fully Connected Layer -->
+  <rect x="800" y="130" width="150" height="120" class="box" rx="5"/>
+  <text x="875" y="160" text-anchor="middle" class="label" font-weight="bold">全连接层</text>
+  
+  <rect x="820" y="180" width="110" height="30" class="highlight-box" rx="3"/>
+  <text x="875" y="200" text-anchor="middle" class="small-label">Dropout (率: 0.5)</text>
+  
+  <rect x="820" y="220" width="110" height="30" class="box" rx="3"/>
+  <text x="875" y="240" text-anchor="middle" class="small-label">线性变换</text>
+  
+  <text x="875" y="270" text-anchor="middle" class="small-label">输出维度: 3</text>
+  
+  <!-- Output -->
+  <rect x="1000" y="150" width="150" height="80" class="box" rx="5"/>
+  <text x="1075" y="175" text-anchor="middle" class="label" font-weight="bold">输出</text>
+  <text x="1075" y="200" text-anchor="middle" class="small-label">三种故障类型分类</text>
+  <text x="1075" y="220" text-anchor="middle" class="small-label">故障类型1</text>
+  <text x="1075" y="235" text-anchor="middle" class="small-label">故障类型2</text>
+  <text x="1075" y="250" text-anchor="middle" class="small-label">故障类型3</text>
+  
+  <!-- Arrows -->
+  <path d="M 40 190 L 50 190" class="arrow"/>
+  <path d="M 230 190 L 280 150" class="arrow"/>
+  <path d="M 230 190 L 280 200" class="arrow"/>
+  <path d="M 230 190 L 280 250" class="arrow"/>
+  
+  <path d="M 560 150 L 610 165" class="arrow"/>
+  <path d="M 560 200 L 610 200" class="arrow"/>
+  <path d="M 560 250 L 610 235" class="arrow"/>
+  
+  <path d="M 750 190 L 800 190" class="arrow"/>
+  <path d="M 950 190 L 1000 190" class="arrow"/>
+  
+  <!-- Bottom note -->
+  <text x="600" y="350" text-anchor="middle" class="small-label">提取局部重要特征，降低维度</text>
+  <text x="140" y="320" text-anchor="middle" class="small-label">[Batch, Sequence Length, 128]</text>
+  <text x="420" y="320" text-anchor="middle" class="small-label">卷积核数量: 100</text>
+  <text x="875" y="300" text-anchor="middle" class="small-label">包含Dropout和线性变换</text>
+</svg>
