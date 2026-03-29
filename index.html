@@ -15,7 +15,7 @@
         }
         
         .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #94B8D9 0%, #53AEDB 100%);
         }
         
         .card-hover {
@@ -48,7 +48,7 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: #667eea;
+            background: #53AEDB;
             transition: width 0.3s ease;
         }
         
@@ -58,7 +58,7 @@
         }
         
         .stat-card {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(208, 228, 242, 0.3) 0%, rgba(148, 184, 217, 0.3) 100%);
         }
         
         /* Mobile optimizations */
@@ -125,7 +125,7 @@
         .hamburger span {
             width: 25px;
             height: 3px;
-            background: #667eea;
+            background: #53AEDB;
             margin: 3px 0;
             transition: 0.3s;
             border-radius: 2px;
@@ -148,23 +148,23 @@
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body style="background-color: #F9EED7;">
     <!-- Navigation -->
     <nav class="bg-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
-                    <i data-lucide="bot" class="w-6 h-6 sm:w-8 sm:h-8 text-purple-600 mr-2 sm:mr-3"></i>
+                    <i data-lucide="bot" class="w-6 h-6 sm:w-8 sm:h-8 mr-2 sm:mr-3" style="color: #53AEDB;"></i>
                     <span class="text-base sm:text-xl font-bold text-gray-800">从"转人工"到"智救"成功</span>
                 </div>
                 
                 <!-- Desktop Navigation -->
                 <div class="desktop-nav flex items-center space-x-8">
-                    <a href="#home" class="nav-link active text-gray-700 hover:text-purple-600 font-medium">首页</a>
-                    <a href="#demo" class="nav-link text-gray-700 hover:text-purple-600 font-medium">智能推荐</a>
-                    <a href="#timing" class="nav-link text-gray-700 hover:text-purple-600 font-medium">时机计算</a>
-                    <a href="#research" class="nav-link text-gray-700 hover:text-purple-600 font-medium">研究发现</a>
-                    <a href="#system" class="nav-link text-gray-700 hover:text-purple-600 font-medium">系统架构</a>
+                    <a href="#home" class="nav-link active text-gray-700 font-medium" style="--hover-color: #53AEDB;">首页</a>
+                    <a href="#demo" class="nav-link text-gray-700 font-medium" style="--hover-color: #53AEDB;">智能推荐</a>
+                    <a href="#timing" class="nav-link text-gray-700 font-medium" style="--hover-color: #53AEDB;">时机计算</a>
+                    <a href="#research" class="nav-link text-gray-700 font-medium" style="--hover-color: #53AEDB;">研究发现</a>
+                    <a href="#system" class="nav-link text-gray-700 font-medium" style="--hover-color: #53AEDB;">系统架构</a>
                 </div>
                 
                 <!-- Mobile Hamburger Menu -->
@@ -177,11 +177,11 @@
             
             <!-- Mobile Menu -->
             <div id="mobileMenu" class="mobile-nav mobile-menu pb-4">
-                <a href="#home" onclick="closeMobileMenu()" class="block py-2 text-gray-700 hover:text-purple-600 font-medium border-b border-gray-200">首页</a>
-                <a href="#demo" onclick="closeMobileMenu()" class="block py-2 text-gray-700 hover:text-purple-600 font-medium border-b border-gray-200">智能推荐</a>
-                <a href="#timing" onclick="closeMobileMenu()" class="block py-2 text-gray-700 hover:text-purple-600 font-medium border-b border-gray-200">时机计算</a>
-                <a href="#research" onclick="closeMobileMenu()" class="block py-2 text-gray-700 hover:text-purple-600 font-medium border-b border-gray-200">研究发现</a>
-                <a href="#system" onclick="closeMobileMenu()" class="block py-2 text-gray-700 hover:text-purple-600 font-medium">系统架构</a>
+                <a href="#home" onclick="closeMobileMenu()" class="block py-2 text-gray-700 font-medium border-b border-gray-200" onmouseover="this.style.color='#53AEDB'" onmouseout="this.style.color=''">首页</a>
+                <a href="#demo" onclick="closeMobileMenu()" class="block py-2 text-gray-700 font-medium border-b border-gray-200" onmouseover="this.style.color='#53AEDB'" onmouseout="this.style.color=''">智能推荐</a>
+                <a href="#timing" onclick="closeMobileMenu()" class="block py-2 text-gray-700 font-medium border-b border-gray-200" onmouseover="this.style.color='#53AEDB'" onmouseout="this.style.color=''">时机计算</a>
+                <a href="#research" onclick="closeMobileMenu()" class="block py-2 text-gray-700 font-medium border-b border-gray-200" onmouseover="this.style.color='#53AEDB'" onmouseout="this.style.color=''">研究发现</a>
+                <a href="#system" onclick="closeMobileMenu()" class="block py-2 text-gray-700 font-medium" onmouseover="this.style.color='#53AEDB'" onmouseout="this.style.color=''">系统架构</a>
             </div>
         </div>
     </nav>
@@ -191,12 +191,12 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center fade-in">
                 <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">从"转人工"到"智救"成功</h1>
-                <p class="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 text-purple-100 hero-subtitle px-4">AI客服智能补救系统 - 基于双螺旋路径模型的服务补救策略</p>
+                <p class="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 hero-subtitle px-4" style="color: rgba(255, 255, 255, 0.9);">AI客服智能补救系统 - 基于双螺旋路径模型的服务补救策略</p>
                 <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 px-4">
-                    <button onclick="scrollToSection('demo')" class="bg-white text-purple-600 px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-purple-50 transition shadow-lg w-full sm:w-auto">
+                    <button onclick="scrollToSection('demo')" class="bg-white px-6 sm:px-8 py-3 rounded-lg font-semibold transition shadow-lg w-full sm:w-auto" style="color: #53AEDB;" onmouseover="this.style.backgroundColor='#F2D4CE'" onmouseout="this.style.backgroundColor='white'">
                         🎯 立即体验智能推荐
                     </button>
-                    <button onclick="scrollToSection('timing')" class="bg-purple-700 text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-purple-800 transition w-full sm:w-auto">
+                    <button onclick="scrollToSection('timing')" class="text-white px-6 sm:px-8 py-3 rounded-lg font-semibold transition w-full sm:w-auto" style="background-color: #94B8D9;" onmouseover="this.style.backgroundColor='#53AEDB'" onmouseout="this.style.backgroundColor='#94B8D9'">
                         ⏱️ 时机效果计算
                     </button>
                 </div>
@@ -205,23 +205,23 @@
     </section>
 
     <!-- Key Statistics -->
-    <section class="py-16 bg-white">
+    <section class="py-16" style="background-color: #F9EED7;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div class="stat-card p-6 rounded-lg text-center card-hover">
-                    <div class="text-4xl font-bold text-purple-600 mb-2">15,000</div>
+                    <div class="text-4xl font-bold mb-2" style="color: #53AEDB;">15,000</div>
                     <div class="text-gray-600">真实评论数据</div>
                 </div>
                 <div class="stat-card p-6 rounded-lg text-center card-hover">
-                    <div class="text-4xl font-bold text-purple-600 mb-2">1,830</div>
+                    <div class="text-4xl font-bold mb-2" style="color: #53AEDB;">1,830</div>
                     <div class="text-gray-600">实验样本量</div>
                 </div>
                 <div class="stat-card p-6 rounded-lg text-center card-hover">
-                    <div class="text-4xl font-bold text-purple-600 mb-2">92.3%</div>
+                    <div class="text-4xl font-bold mb-2" style="color: #53AEDB;">92.3%</div>
                     <div class="text-gray-600">失败识别准确率</div>
                 </div>
                 <div class="stat-card p-6 rounded-lg text-center card-hover">
-                    <div class="text-4xl font-bold text-purple-600 mb-2">78.3%</div>
+                    <div class="text-4xl font-bold mb-2" style="color: #53AEDB;">78.3%</div>
                     <div class="text-gray-600">能力螺旋解释力</div>
                 </div>
             </div>
@@ -229,17 +229,17 @@
     </section>
 
     <!-- Interactive Demo -->
-    <section id="demo" class="py-16 bg-gradient-to-br from-purple-50 to-blue-50">
+    <section id="demo" class="py-16" style="background: linear-gradient(to bottom right, #D0E4F2, #F2D4CE);">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-8">
                 <h2 class="text-4xl font-bold text-gray-800 mb-4">🎯 智能补救策略推荐系统</h2>
                 <p class="text-lg text-gray-600">基于15,000条真实数据训练，准确率92.3%的智能决策引擎</p>
             </div>
             
-            <div class="bg-white rounded-xl shadow-2xl p-8 border-t-4 border-purple-600">
+            <div class="bg-white rounded-xl shadow-2xl p-8" style="border-top: 4px solid #53AEDB;">
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">选择服务失败类型</label>
-                    <select id="failureType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+                    <select id="failureType" class="w-full px-4 py-2 border border-gray-300 rounded-lg" style="outline: none;" onfocus="this.style.borderColor='#53AEDB'; this.style.boxShadow='0 0 0 2px rgba(83, 174, 219, 0.2)'" onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
                         <option value="technical">技术性失败 (理解错误、无法解决问题)</option>
                         <option value="interaction">互动性失败 (态度冷漠、缺乏关怀)</option>
                     </select>
@@ -247,7 +247,7 @@
 
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">选择用户类型</label>
-                    <select id="userType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+                    <select id="userType" class="w-full px-4 py-2 border border-gray-300 rounded-lg" style="outline: none;" onfocus="this.style.borderColor='#53AEDB'; this.style.boxShadow='0 0 0 2px rgba(83, 174, 219, 0.2)'" onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
                         <option value="rational">技术理性型 (注重问题解决)</option>
                         <option value="emotional">情感敏感型 (注重情感互动)</option>
                         <option value="balanced">平衡务实型 (兼顾能力与情感)</option>
@@ -263,12 +263,12 @@
                     </div>
                 </div>
 
-                <button onclick="generateRecommendation()" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 rounded-lg font-bold text-lg hover:from-purple-700 hover:to-blue-700 transition shadow-lg">
+                <button onclick="generateRecommendation()" class="w-full text-white py-4 rounded-lg font-bold text-lg transition shadow-lg" style="background: linear-gradient(to right, #94B8D9, #53AEDB);" onmouseover="this.style.background='linear-gradient(to right, #53AEDB, #94B8D9)'" onmouseout="this.style.background='linear-gradient(to right, #94B8D9, #53AEDB)'">
                     🚀 生成智能推荐
                 </button>
 
                 <div id="recommendation" class="mt-8 hidden">
-                    <div class="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-lg border-l-4 border-purple-600">
+                    <div class="p-6 rounded-lg" style="background: linear-gradient(to right, #D0E4F2, #F2D4CE); border-left: 4px solid #53AEDB;">
                         <h3 class="text-xl font-bold mb-4 text-gray-800">推荐补救策略</h3>
                         <div id="recommendationContent"></div>
                     </div>
@@ -278,32 +278,32 @@
     </section>
 
     <!-- Research Findings -->
-    <section id="research" class="py-16 bg-gray-50">
+    <section id="research" class="py-16" style="background-color: #F9EED7;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">核心研究发现</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
                 <div class="bg-white p-6 rounded-lg shadow-lg card-hover">
                     <div class="flex items-center mb-4">
-                        <i data-lucide="target" class="w-8 h-8 text-purple-600 mr-3"></i>
+                        <i data-lucide="target" class="w-8 h-8 mr-3" style="color: #53AEDB;"></i>
                         <h3 class="text-xl font-bold text-gray-800">非对称匹配效应</h3>
                     </div>
                     <p class="text-gray-600 mb-4">技术性失败场景下能力导向补救效果最优，互动性失败场景下情感导向补救更具优势。</p>
-                    <div class="bg-purple-50 p-4 rounded">
+                    <div class="p-4 rounded" style="background-color: #D0E4F2;">
                         <div class="text-sm text-gray-700 mb-2">技术性失败 × 能力补救</div>
                         <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div class="bg-purple-600 h-2 rounded-full" style="width: 85%"></div>
+                            <div class="h-2 rounded-full" style="width: 85%; background-color: #53AEDB;"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="bg-white p-6 rounded-lg shadow-lg card-hover">
                     <div class="flex items-center mb-4">
-                        <i data-lucide="users" class="w-8 h-8 text-purple-600 mr-3"></i>
+                        <i data-lucide="users" class="w-8 h-8 mr-3" style="color: #F2A399;"></i>
                         <h3 class="text-xl font-bold text-gray-800">拟人化双刃剑</h3>
                     </div>
                     <p class="text-gray-600 mb-4">高拟人化在技术性失败中提升留存，在互动性失败中反而降低留存意愿。</p>
-                    <div class="bg-purple-50 p-4 rounded">
+                    <div class="p-4 rounded" style="background-color: #F2D4CE;">
                         <div class="text-sm text-gray-700 mb-2">拟人化效应差异</div>
                         <div class="flex justify-between text-xs text-gray-600">
                             <span>技术失败: +17.2%</span>
@@ -314,11 +314,11 @@
 
                 <div class="bg-white p-6 rounded-lg shadow-lg card-hover">
                     <div class="flex items-center mb-4">
-                        <i data-lucide="git-branch" class="w-8 h-8 text-purple-600 mr-3"></i>
+                        <i data-lucide="git-branch" class="w-8 h-8 mr-3" style="color: #94B8D9;"></i>
                         <h3 class="text-xl font-bold text-gray-800">双螺旋路径</h3>
                     </div>
                     <p class="text-gray-600 mb-4">能力螺旋与温暖螺旋是服务失败影响消费者留存的核心心理机制。</p>
-                    <div class="bg-purple-50 p-4 rounded">
+                    <div class="p-4 rounded" style="background-color: #D0E4F2;">
                         <div class="text-sm text-gray-700 mb-1">能力螺旋: 78.3%</div>
                         <div class="text-sm text-gray-700">温暖螺旋: 72.5%</div>
                     </div>
@@ -340,7 +340,7 @@
     </section>
 
     <!-- Remedy Timing Section -->
-    <section id="timing" class="py-16 bg-white">
+    <section id="timing" class="py-16" style="background-color: #F9EED7;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">补救时机分析</h2>
             <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
@@ -349,12 +349,12 @@
             
             <!-- Timing Importance -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                <div class="bg-gradient-to-br from-red-50 to-red-100 p-6 rounded-lg card-hover border-l-4 border-red-500">
+                <div class="p-6 rounded-lg card-hover" style="background: linear-gradient(to bottom right, #F2D4CE, #F2A399); border-left: 4px solid #F2A399;">
                     <div class="flex items-center mb-4">
-                        <i data-lucide="alert-circle" class="w-8 h-8 text-red-600 mr-3"></i>
+                        <i data-lucide="alert-circle" class="w-8 h-8 mr-3" style="color: #F2A399;"></i>
                         <h3 class="text-xl font-bold text-gray-800">即时补救</h3>
                     </div>
-                    <div class="text-3xl font-bold text-red-600 mb-2">0-5分钟</div>
+                    <div class="text-3xl font-bold mb-2" style="color: #F2A399;">0-5分钟</div>
                     <p class="text-gray-700 mb-3">黄金补救窗口期</p>
                     <ul class="text-sm text-gray-600 space-y-2">
                         <li>• 用户情绪尚未激化</li>
@@ -364,12 +364,12 @@
                     </ul>
                 </div>
 
-                <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 rounded-lg card-hover border-l-4 border-yellow-500">
+                <div class="p-6 rounded-lg card-hover" style="background: linear-gradient(to bottom right, #F9EED7, #F2D4CE); border-left: 4px solid #94B8D9;">
                     <div class="flex items-center mb-4">
-                        <i data-lucide="clock" class="w-8 h-8 text-yellow-600 mr-3"></i>
+                        <i data-lucide="clock" class="w-8 h-8 mr-3" style="color: #94B8D9;"></i>
                         <h3 class="text-xl font-bold text-gray-800">延迟补救</h3>
                     </div>
-                    <div class="text-3xl font-bold text-yellow-600 mb-2">5-30分钟</div>
+                    <div class="text-3xl font-bold mb-2" style="color: #94B8D9;">5-30分钟</div>
                     <p class="text-gray-700 mb-3">补救效果递减期</p>
                     <ul class="text-sm text-gray-600 space-y-2">
                         <li>• 用户耐心逐渐消耗</li>
@@ -379,12 +379,12 @@
                     </ul>
                 </div>
 
-                <div class="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-lg card-hover border-l-4 border-gray-500">
+                <div class="p-6 rounded-lg card-hover" style="background: linear-gradient(to bottom right, #D0E4F2, #94B8D9); border-left: 4px solid #53AEDB;">
                     <div class="flex items-center mb-4">
-                        <i data-lucide="x-circle" class="w-8 h-8 text-gray-600 mr-3"></i>
+                        <i data-lucide="x-circle" class="w-8 h-8 mr-3" style="color: #53AEDB;"></i>
                         <h3 class="text-xl font-bold text-gray-800">滞后补救</h3>
                     </div>
-                    <div class="text-3xl font-bold text-gray-600 mb-2">&gt;30分钟</div>
+                    <div class="text-3xl font-bold mb-2" style="color: #53AEDB;">&gt;30分钟</div>
                     <p class="text-gray-700 mb-3">补救效果微弱期</p>
                     <ul class="text-sm text-gray-600 space-y-2">
                         <li>• 用户已产生强烈不满</li>
@@ -402,30 +402,30 @@
             </div>
 
             <!-- Timing Recommendations -->
-            <div class="bg-gradient-to-r from-purple-50 to-blue-50 p-8 rounded-lg">
+            <div class="p-8 rounded-lg" style="background: linear-gradient(to right, #D0E4F2, #F2D4CE);">
                 <h3 class="text-2xl font-bold mb-6 text-gray-800 text-center">不同时机的补救建议</h3>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-white p-6 rounded-lg shadow">
                         <div class="flex items-center mb-4">
-                            <div class="bg-green-500 w-3 h-3 rounded-full mr-3"></div>
+                            <div class="w-3 h-3 rounded-full mr-3" style="background-color: #53AEDB;"></div>
                             <h4 class="text-lg font-bold text-gray-800">即时补救策略 (0-5分钟)</h4>
                         </div>
                         <ul class="space-y-3 text-gray-700">
                             <li class="flex items-start">
-                                <i data-lucide="zap" class="w-5 h-5 text-green-600 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <i data-lucide="zap" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #53AEDB;"></i>
                                 <span><strong>快速响应：</strong>AI自动识别失败，立即触发补救流程</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="message-circle" class="w-5 h-5 text-green-600 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <i data-lucide="message-circle" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #53AEDB;"></i>
                                 <span><strong>主动沟通：</strong>"我注意到刚才的回答可能没有解决您的问题"</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="gift" class="w-5 h-5 text-green-600 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <i data-lucide="gift" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #53AEDB;"></i>
                                 <span><strong>即时补偿：</strong>自动发放小额优惠券或积分</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="arrow-right-circle" class="w-5 h-5 text-green-600 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <i data-lucide="arrow-right-circle" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #53AEDB;"></i>
                                 <span><strong>无缝转接：</strong>提供"立即转人工"选项，0等待接入</span>
                             </li>
                         </ul>
@@ -433,24 +433,24 @@
 
                     <div class="bg-white p-6 rounded-lg shadow">
                         <div class="flex items-center mb-4">
-                            <div class="bg-yellow-500 w-3 h-3 rounded-full mr-3"></div>
+                            <div class="w-3 h-3 rounded-full mr-3" style="background-color: #94B8D9;"></div>
                             <h4 class="text-lg font-bold text-gray-800">延迟补救策略 (5-30分钟)</h4>
                         </div>
                         <ul class="space-y-3 text-gray-700">
                             <li class="flex items-start">
-                                <i data-lucide="heart" class="w-5 h-5 text-yellow-600 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <i data-lucide="heart" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #94B8D9;"></i>
                                 <span><strong>情感安抚：</strong>"非常抱歉让您久等，我们理解您的着急"</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="trending-up" class="w-5 h-5 text-yellow-600 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <i data-lucide="trending-up" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #94B8D9;"></i>
                                 <span><strong>升级补偿：</strong>提供更高价值的补偿方案（如折扣券、运费券）</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="user-check" class="w-5 h-5 text-yellow-600 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <i data-lucide="user-check" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #94B8D9;"></i>
                                 <span><strong>专人跟进：</strong>安排高级客服专员一对一处理</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="shield-check" class="w-5 h-5 text-yellow-600 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <i data-lucide="shield-check" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #94B8D9;"></i>
                                 <span><strong>承诺保障：</strong>明确解决时间节点，建立信任</span>
                             </li>
                         </ul>
@@ -458,24 +458,24 @@
 
                     <div class="bg-white p-6 rounded-lg shadow">
                         <div class="flex items-center mb-4">
-                            <div class="bg-orange-500 w-3 h-3 rounded-full mr-3"></div>
+                            <div class="w-3 h-3 rounded-full mr-3" style="background-color: #F2A399;"></div>
                             <h4 class="text-lg font-bold text-gray-800">滞后补救策略 (&gt;30分钟)</h4>
                         </div>
                         <ul class="space-y-3 text-gray-700">
                             <li class="flex items-start">
-                                <i data-lucide="alert-triangle" class="w-5 h-5 text-orange-600 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <i data-lucide="alert-triangle" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #F2A399;"></i>
                                 <span><strong>诚恳道歉：</strong>高层级道歉，承认服务不足</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="award" class="w-5 h-5 text-orange-600 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <i data-lucide="award" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #F2A399;"></i>
                                 <span><strong>超值补偿：</strong>提供超出预期的补偿（如大额优惠、VIP权益）</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="phone-call" class="w-5 h-5 text-orange-600 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <i data-lucide="phone-call" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #F2A399;"></i>
                                 <span><strong>主动外呼：</strong>客服主动致电用户，展现重视</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="repeat" class="w-5 h-5 text-orange-600 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <i data-lucide="repeat" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #F2A399;"></i>
                                 <span><strong>长期跟踪：</strong>后续回访，确保问题彻底解决</span>
                             </li>
                         </ul>
@@ -483,24 +483,24 @@
 
                     <div class="bg-white p-6 rounded-lg shadow">
                         <div class="flex items-center mb-4">
-                            <div class="bg-blue-500 w-3 h-3 rounded-full mr-3"></div>
+                            <div class="w-3 h-3 rounded-full mr-3" style="background-color: #53AEDB;"></div>
                             <h4 class="text-lg font-bold text-gray-800">预防性补救 (失败前)</h4>
                         </div>
                         <ul class="space-y-3 text-gray-700">
                             <li class="flex items-start">
-                                <i data-lucide="eye" class="w-5 h-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <i data-lucide="eye" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #53AEDB;"></i>
                                 <span><strong>风险识别：</strong>AI实时监测对话情绪，预判失败风险</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="shield" class="w-5 h-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <i data-lucide="shield" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #53AEDB;"></i>
                                 <span><strong>主动干预：</strong>在失败发生前提供替代方案</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="users" class="w-5 h-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <i data-lucide="users" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #53AEDB;"></i>
                                 <span><strong>智能转接：</strong>复杂问题自动转人工，避免AI失败</span>
                             </li>
                             <li class="flex items-start">
-                                <i data-lucide="lightbulb" class="w-5 h-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <i data-lucide="lightbulb" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #53AEDB;"></i>
                                 <span><strong>期望管理：</strong>提前说明AI能力边界，降低期待落差</span>
                             </li>
                         </ul>
@@ -522,19 +522,19 @@
 
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-gray-700 mb-2">失败严重程度</label>
-                        <select id="severityLevel" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+                        <select id="severityLevel" class="w-full px-4 py-2 border border-gray-300 rounded-lg" style="outline: none;" onfocus="this.style.borderColor='#53AEDB'; this.style.boxShadow='0 0 0 2px rgba(83, 174, 219, 0.2)'" onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
                             <option value="low">轻微 (理解偏差、回答不完整)</option>
                             <option value="medium" selected>中等 (无法解决问题、多次失败)</option>
                             <option value="high">严重 (系统故障、造成损失)</option>
                         </select>
                     </div>
 
-                    <button onclick="calculateTimingEffect()" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition">
+                    <button onclick="calculateTimingEffect()" class="w-full text-white py-3 rounded-lg font-semibold transition" style="background-color: #53AEDB;" onmouseover="this.style.backgroundColor='#94B8D9'" onmouseout="this.style.backgroundColor='#53AEDB'">
                         计算补救效果
                     </button>
 
                     <div id="timingResult" class="mt-6 hidden">
-                        <div class="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-lg border-l-4 border-purple-600">
+                        <div class="p-6 rounded-lg" style="background: linear-gradient(to right, #D0E4F2, #F2D4CE); border-left: 4px solid #53AEDB;">
                             <div id="timingResultContent"></div>
                         </div>
                     </div>
@@ -544,7 +544,7 @@
     </section>
 
     <!-- Intelligent System -->
-    <section id="system" class="py-16 bg-white">
+    <section id="system" class="py-16" style="background-color: #F9EED7;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">智能补救决策系统</h2>
             
@@ -555,8 +555,8 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg card-hover">
-                    <div class="bg-purple-600 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                <div class="p-6 rounded-lg card-hover" style="background: linear-gradient(to bottom right, #D0E4F2, #94B8D9);">
+                    <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style="background-color: #53AEDB;">
                         <i data-lucide="search" class="w-6 h-6 text-white"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-3 text-gray-800">算法识别层</h3>
@@ -568,8 +568,8 @@
                     </ul>
                 </div>
 
-                <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg card-hover">
-                    <div class="bg-blue-600 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                <div class="p-6 rounded-lg card-hover" style="background: linear-gradient(to bottom right, #F2D4CE, #F2A399);">
+                    <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style="background-color: #F2A399;">
                         <i data-lucide="users-2" class="w-6 h-6 text-white"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-3 text-gray-800">用户分类层</h3>
@@ -582,8 +582,8 @@
                     </ul>
                 </div>
 
-                <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg card-hover">
-                    <div class="bg-green-600 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                <div class="p-6 rounded-lg card-hover" style="background: linear-gradient(to bottom right, #D0E4F2, #F9EED7);">
+                    <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style="background-color: #94B8D9;">
                         <i data-lucide="brain" class="w-6 h-6 text-white"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-3 text-gray-800">补救决策层</h3>
@@ -599,9 +599,9 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8">
+    <footer class="py-8" style="background-color: #94B8D9;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-gray-400">© 2026 从"转人工"到"智救"成功 - AI客服智能补救系统 | 基于双螺旋路径模型的研究成果</p>
+            <p style="color: rgba(255, 255, 255, 0.9);">© 2026 从"转人工"到"智救"成功 - AI客服智能补救系统 | 基于双螺旋路径模型的研究成果</p>
         </div>
     </footer>
 
