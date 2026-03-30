@@ -1,57 +1,74 @@
 // Initialize Lucide icons
 lucide.createIcons();
 
-// Mobile menu toggle
-function toggleMobileMenu() {
-    const mobileMenu = document.getElementById('mobileMenu');
-    if (mobileMenu) {
-        mobileMenu.classList.toggle('active');
+// 当前页面
+let currentPage = 'home';
+
+// 页面切换函数
+function switchPage(pageId) {
+    // 隐藏所有页面
+    document.querySelectorAll('.page-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // 显示目标页面
+    const targetPage = document.getElementById('page-' + pageId);
+    if (targetPage) {
+        targetPage.classList.add('active');
+    }
+    
+    // 更新导航状态 - 底部导航
+    document.querySelectorAll('.bottom-nav-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.dataset.page === pageId) {
+            item.classList.add('active');
+        }
+    });
+    
+    // 更新导航状态 - 桌面端导航
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.dataset.page === pageId) {
+            link.classList.add('active');
+        }
+    });
+    
+    currentPage = pageId;
+    
+    // 滚动到顶部
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // 如果是研究发现页面，确保图表已初始化
+    if (pageId === 'research') {
+        setTimeout(() => {
+            initializeCharts();
+        }, 100);
     }
 }
 
-function closeMobileMenu() {
-    const mobileMenu = document.getElementById('mobileMenu');
-    if (mobileMenu) {
-        mobileMenu.classList.remove('active');
-    }
-}
-
-// Smooth scrolling
-function scrollToSection(sectionId) {
-    const element = document.getElementById(sectionId);
-    if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-    }
-    closeMobileMenu(); // Close mobile menu after navigation
-}
-
-// Navigation active state
+// DOM 加载完成后初始化
 document.addEventListener('DOMContentLoaded', function() {
-    const navLinks = document.querySelectorAll('.nav-link');
-    const sections = document.querySelectorAll('section[id]');
-
-    window.addEventListener('scroll', () => {
-        let current = '';
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            if (pageYOffset >= sectionTop - 200) {
-                current = section.getAttribute('id');
-            }
-        });
-
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add('active');
-            }
+    // 绑定底部导航点击事件
+    document.querySelectorAll('.bottom-nav-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const pageId = this.dataset.page;
+            switchPage(pageId);
         });
     });
-
-    // Initialize charts
+    
+    // 绑定桌面端导航点击事件
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const pageId = this.dataset.page;
+            switchPage(pageId);
+        });
+    });
+    
+    // 初始化图表
     initializeCharts();
     
-    // Anthropomorphism slider
+    // 拟人化程度滑块
     const slider = document.getElementById('anthropomorphism');
     const valueDisplay = document.getElementById('anthropomorphismValue');
     
@@ -61,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Response time slider
+    // 响应时间滑块
     const responseTimeSlider = document.getElementById('responseTime');
     const responseTimeValue = document.getElementById('responseTimeValue');
     
@@ -72,12 +89,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Initialize charts
+// 图表实例
+let failureTypeChart = null;
+let remedyEffectChart = null;
+
+// 初始化图表
 function initializeCharts() {
-    // Failure Type Distribution Chart
+    // 失败类型分布图
     const failureTypeCtx = document.getElementById('failureTypeChart');
-    if (failureTypeCtx) {
-        new Chart(failureTypeCtx, {
+    if (failureTypeCtx && !failureTypeChart) {
+        failureTypeChart = new Chart(failureTypeCtx, {
             type: 'doughnut',
             data: {
                 labels: ['技术性失败', '互动性失败', '其他'],
@@ -88,7 +109,8 @@ function initializeCharts() {
                         'rgba(118, 75, 162, 0.8)',
                         'rgba(156, 163, 175, 0.8)'
                     ],
-                    borderWidth: 0
+                    borderWidth: 0,
+                    borderRadius: 4
                 }]
             },
             options: {
@@ -117,20 +139,20 @@ function initializeCharts() {
         });
     }
 
-    // Remedy Effect Comparison Chart
+    // 补救效果对比图
     const remedyEffectCtx = document.getElementById('remedyEffectChart');
-    if (remedyEffectCtx) {
-        new Chart(remedyEffectCtx, {
+    if (remedyEffectCtx && !remedyEffectChart) {
+        remedyEffectChart = new Chart(remedyEffectCtx, {
             type: 'bar',
             data: {
-                labels: ['能力导向补救', '情感导向补救', '混合补救', '无补救'],
+                labels: ['能力导向', '情感导向', '混合策略', '无补救'],
                 datasets: [{
                     label: '留存意愿提升',
                     data: [5.85, 4.62, 6.26, 3.45],
                     backgroundColor: [
                         'rgba(102, 126, 234, 0.8)',
-                        'rgba(118, 75, 162, 0.8)',
-                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(240, 147, 251, 0.8)',
+                        'rgba(79, 172, 254, 0.8)',
                         'rgba(156, 163, 175, 0.8)'
                     ],
                     borderWidth: 0,
@@ -173,79 +195,9 @@ function initializeCharts() {
             }
         });
     }
-
-    // Timing Effect Chart
-    const timingEffectCtx = document.getElementById('timingEffectChart');
-    if (timingEffectCtx) {
-        new Chart(timingEffectCtx, {
-            type: 'line',
-            data: {
-                labels: ['0分钟', '5分钟', '10分钟', '15分钟', '20分钟', '30分钟', '45分钟', '60分钟'],
-                datasets: [{
-                    label: '留存意愿提升效果',
-                    data: [6.5, 6.2, 5.8, 5.3, 4.8, 4.2, 3.5, 3.0],
-                    borderColor: 'rgba(102, 126, 234, 1)',
-                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                    tension: 0.4,
-                    fill: true,
-                    pointRadius: 5,
-                    pointHoverRadius: 7,
-                    pointBackgroundColor: 'rgba(102, 126, 234, 1)'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 7,
-                        title: {
-                            display: true,
-                            text: '留存意愿提升 (分)',
-                            font: {
-                                family: "'Noto Sans SC', sans-serif"
-                            }
-                        },
-                        ticks: {
-                            font: {
-                                family: "'Noto Sans SC', sans-serif"
-                            }
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: '响应时间',
-                            font: {
-                                family: "'Noto Sans SC', sans-serif"
-                            }
-                        },
-                        ticks: {
-                            font: {
-                                family: "'Noto Sans SC', sans-serif"
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return '效果: ' + context.parsed.y.toFixed(1) + ' 分';
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
 }
 
-// Generate recommendation based on user inputs
+// 生成推荐策略
 function generateRecommendation() {
     const failureType = document.getElementById('failureType').value;
     const userType = document.getElementById('userType').value;
@@ -258,62 +210,69 @@ function generateRecommendation() {
     let reasoning = '';
     let expectedEffect = '';
     let anthropomorphismAdvice = '';
+    let effectPercent = 0;
     
-    // Determine optimal strategy based on failure type and user type
+    // 根据失败类型和用户类型确定最优策略
     if (failureType === 'technical') {
         if (userType === 'rational' || userType === 'low') {
             strategy = '能力导向补救';
-            reasoning = '技术性失败场景下，技术理性型用户最看重问题的快速解决和实质性补偿。';
-            expectedEffect = '预期留存意愿提升: <strong class="text-purple-600">+85%</strong>';
+            reasoning = '技术性失败场景下，理性型用户最看重问题的快速解决和实质性补偿。';
+            effectPercent = 85;
+            expectedEffect = '预期留存意愿提升: <strong style="color: #667eea;">+' + effectPercent + '%</strong>';
             anthropomorphismAdvice = anthropomorphism > 50 
-                ? '建议保持当前拟人化水平，高拟人化可增强信任感。'
-                : '建议适度提升拟人化程度至60-70%，可放大补救效果。';
+                ? '<span style="color: #16a34a;"><i data-lucide="check" class="w-4 h-4 inline"></i> 建议保持当前拟人化水平，高拟人化可增强信任感。</span>'
+                : '<span style="color: #d97706;"><i data-lucide="info" class="w-4 h-4 inline"></i> 建议适度提升拟人化程度至60-70%，可放大补救效果。</span>';
         } else if (userType === 'emotional') {
             strategy = '混合补救策略';
-            reasoning = '技术性失败遇到情感敏感型用户，需要在解决问题的同时提供情感安抚。';
-            expectedEffect = '预期留存意愿提升: <strong class="text-purple-600">+78%</strong>';
+            reasoning = '技术性失败遇到感性型用户，需要在解决问题的同时提供情感安抚。';
+            effectPercent = 78;
+            expectedEffect = '预期留存意愿提升: <strong style="color: #667eea;">+' + effectPercent + '%</strong>';
             anthropomorphismAdvice = '建议拟人化程度保持在50-60%，平衡能力展示与情感表达。';
         } else {
             strategy = '混合补救策略';
-            reasoning = '平衡务实型用户要求兼顾问题解决与互动体验。';
-            expectedEffect = '预期留存意愿提升: <strong class="text-purple-600">+82%</strong>';
+            reasoning = '平衡型用户要求兼顾问题解决与互动体验。';
+            effectPercent = 82;
+            expectedEffect = '预期留存意愿提升: <strong style="color: #667eea;">+' + effectPercent + '%</strong>';
             anthropomorphismAdvice = '建议拟人化程度保持在55-65%，实现最佳平衡。';
         }
     } else {
         if (userType === 'emotional') {
             strategy = '情感导向补救';
-            reasoning = '互动性失败场景下，情感敏感型用户最需要真诚道歉和情感关怀。';
-            expectedEffect = '预期留存意愿提升: <strong class="text-purple-600">+72%</strong>';
+            reasoning = '互动性失败场景下，感性型用户最需要真诚道歉和情感关怀。';
+            effectPercent = 72;
+            expectedEffect = '预期留存意愿提升: <strong style="color: #667eea;">+' + effectPercent + '%</strong>';
             anthropomorphismAdvice = anthropomorphism > 60 
-                ? '<span class="text-red-600">警告：高拟人化可能加剧期待落差，建议降至40-50%。</span>'
-                : '当前拟人化水平适宜，保持真诚简洁的表达方式。';
+                ? '<span style="color: #dc2626;"><i data-lucide="alert-triangle" class="w-4 h-4 inline"></i> 警告：高拟人化可能加剧期待落差，建议降至40-50%。</span>'
+                : '<span style="color: #16a34a;"><i data-lucide="check" class="w-4 h-4 inline"></i> 当前拟人化水平适宜，保持真诚简洁的表达方式。</span>';
         } else if (userType === 'rational' || userType === 'low') {
             strategy = '能力导向补救';
             reasoning = '即使是互动性失败，理性型用户仍更看重问题的实质性解决。';
-            expectedEffect = '预期留存意愿提升: <strong class="text-purple-600">+58%</strong>';
+            effectPercent = 58;
+            expectedEffect = '预期留存意愿提升: <strong style="color: #667eea;">+' + effectPercent + '%</strong>';
             anthropomorphismAdvice = '建议降低拟人化程度至30-40%，采用简洁高效的沟通方式。';
         } else {
             strategy = '混合补救策略';
-            reasoning = '平衡务实型用户需要情感关怀与实质补偿并重。';
-            expectedEffect = '预期留存意愿提升: <strong class="text-purple-600">+75%</strong>';
+            reasoning = '平衡型用户需要情感关怀与实质补偿并重。';
+            effectPercent = 75;
+            expectedEffect = '预期留存意愿提升: <strong style="color: #667eea;">+' + effectPercent + '%</strong>';
             anthropomorphismAdvice = '建议拟人化程度保持在45-55%。';
         }
     }
     
-    // Generate specific action items
+    // 生成行动建议
     let actionItems = '';
     if (strategy.includes('能力')) {
         actionItems = `
-            <li class="flex items-start mb-2">
-                <i data-lucide="check-circle" class="w-5 h-5 text-green-600 mr-2 mt-0.5"></i>
+            <li class="flex items-start mb-3">
+                <i data-lucide="check-circle-2" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #16a34a;"></i>
                 <span>立即识别问题根源，提供明确的解决方案</span>
             </li>
-            <li class="flex items-start mb-2">
-                <i data-lucide="check-circle" class="w-5 h-5 text-green-600 mr-2 mt-0.5"></i>
+            <li class="flex items-start mb-3">
+                <i data-lucide="gift" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #667eea;"></i>
                 <span>提供实质性补偿（优惠券、退款、加急处理）</span>
             </li>
-            <li class="flex items-start mb-2">
-                <i data-lucide="check-circle" class="w-5 h-5 text-green-600 mr-2 mt-0.5"></i>
+            <li class="flex items-start mb-3">
+                <i data-lucide="award" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #f59e0b;"></i>
                 <span>展示专业能力，说明已采取的改进措施</span>
             </li>
         `;
@@ -321,68 +280,103 @@ function generateRecommendation() {
     
     if (strategy.includes('情感')) {
         actionItems += `
-            <li class="flex items-start mb-2">
-                <i data-lucide="heart" class="w-5 h-5 text-purple-600 mr-2 mt-0.5"></i>
+            <li class="flex items-start mb-3">
+                <i data-lucide="heart" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #ec4899;"></i>
                 <span>真诚道歉，表达对用户感受的理解</span>
             </li>
-            <li class="flex items-start mb-2">
-                <i data-lucide="heart" class="w-5 h-5 text-purple-600 mr-2 mt-0.5"></i>
+            <li class="flex items-start mb-3">
+                <i data-lucide="smile" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #f59e0b;"></i>
                 <span>提供情感安抚，展现同理心</span>
             </li>
-            <li class="flex items-start mb-2">
-                <i data-lucide="heart" class="w-5 h-5 text-purple-600 mr-2 mt-0.5"></i>
+            <li class="flex items-start mb-3">
+                <i data-lucide="user-check" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #667eea;"></i>
                 <span>个性化关怀，让用户感到被重视</span>
             </li>
         `;
     }
     
+    if (strategy.includes('混合')) {
+        actionItems = `
+            <li class="flex items-start mb-3">
+                <i data-lucide="message-circle" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #667eea;"></i>
+                <span>首先真诚道歉，表达对用户感受的理解</span>
+            </li>
+            <li class="flex items-start mb-3">
+                <i data-lucide="wrench" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #16a34a;"></i>
+                <span>快速定位问题，提供明确的解决方案</span>
+            </li>
+            <li class="flex items-start mb-3">
+                <i data-lucide="gift" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #ec4899;"></i>
+                <span>提供补偿方案，包括优惠券或积分</span>
+            </li>
+            <li class="flex items-start mb-3">
+                <i data-lucide="phone" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #f59e0b;"></i>
+                <span>后续跟进，确保问题彻底解决</span>
+            </li>
+        `;
+    }
+    
     contentDiv.innerHTML = `
-        <div class="mb-4">
-            <div class="text-sm text-gray-600 mb-1">推荐策略</div>
-            <div class="text-2xl font-bold text-purple-600">${strategy}</div>
+        <div class="flex items-center gap-3 mb-4">
+            <div class="icon-box primary">
+                <i data-lucide="lightbulb"></i>
+            </div>
+            <div>
+                <div class="text-sm text-gray-500">推荐策略</div>
+                <div class="text-2xl font-bold" style="color: #667eea;">${strategy}</div>
+            </div>
+        </div>
+        
+        <div class="mb-4 p-4 rounded-xl" style="background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);">
+            <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-600">预期留存提升</span>
+                <span class="text-3xl font-bold" style="color: #667eea;">+${effectPercent}%</span>
+            </div>
         </div>
         
         <div class="mb-4">
-            <div class="text-sm text-gray-600 mb-2">策略依据</div>
+            <div class="text-sm text-gray-500 mb-2 flex items-center gap-2">
+                <i data-lucide="info" class="w-4 h-4"></i>
+                策略依据
+            </div>
             <p class="text-gray-700">${reasoning}</p>
         </div>
         
         <div class="mb-4">
-            <div class="text-sm text-gray-600 mb-2">预期效果</div>
-            <p class="text-gray-700">${expectedEffect}</p>
-        </div>
-        
-        <div class="mb-4">
-            <div class="text-sm text-gray-600 mb-2">拟人化建议</div>
+            <div class="text-sm text-gray-500 mb-2 flex items-center gap-2">
+                <i data-lucide="sliders" class="w-4 h-4"></i>
+                拟人化建议
+            </div>
             <p class="text-gray-700">${anthropomorphismAdvice}</p>
         </div>
         
         <div class="mt-6">
-            <div class="text-sm text-gray-600 mb-3">具体行动建议</div>
-            <ul class="space-y-2">
+            <div class="text-sm text-gray-500 mb-3 font-medium flex items-center gap-2">
+                <i data-lucide="list-checks" class="w-4 h-4"></i>
+                具体行动建议
+            </div>
+            <ul class="space-y-1">
                 ${actionItems}
             </ul>
         </div>
         
-        <div class="mt-6 p-4 bg-blue-50 rounded-lg">
-            <div class="flex items-start">
-                <i data-lucide="lightbulb" class="w-5 h-5 text-blue-600 mr-2 mt-0.5"></i>
+        <div class="mt-6 p-4 rounded-xl" style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);">
+            <div class="flex items-start gap-3">
+                <i data-lucide="info" class="w-5 h-5 flex-shrink-0" style="color: #16a34a;"></i>
                 <div class="text-sm text-gray-700">
-                    <strong>系统提示：</strong>该推荐基于1,830份实验样本和15,000条真实评论数据训练的贝叶斯网络模型生成，
-                    准确率达92.3%。建议结合实际情况灵活调整。
+                    <strong>提示：</strong>该推荐基于1,830份实验样本和15,000条真实评论数据生成，建议结合实际情况灵活调整。
                 </div>
             </div>
         </div>
     `;
     
     recommendationDiv.classList.remove('hidden');
-    recommendationDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     
-    // Reinitialize icons for dynamically added content
+    // 重新初始化图标
     lucide.createIcons();
 }
 
-// Calculate timing effect based on response time and severity
+// 计算时机效果
 function calculateTimingEffect() {
     const responseTime = parseInt(document.getElementById('responseTime').value);
     const severity = document.getElementById('severityLevel').value;
@@ -390,30 +384,34 @@ function calculateTimingEffect() {
     const resultDiv = document.getElementById('timingResult');
     const contentDiv = document.getElementById('timingResultContent');
     
-    // Calculate base effect based on response time
+    // 根据响应时间计算基础效果
     let baseEffect = 0;
     let timingCategory = '';
+    let timingIcon = '';
     let timingColor = '';
     let retentionIncrease = 0;
     
     if (responseTime <= 5) {
         timingCategory = '即时补救';
-        timingColor = 'text-green-600';
+        timingIcon = 'zap';
+        timingColor = '#16a34a';
         baseEffect = 6.5 - (responseTime * 0.06);
         retentionIncrease = 92 - (responseTime * 2);
     } else if (responseTime <= 30) {
         timingCategory = '延迟补救';
-        timingColor = 'text-yellow-600';
+        timingIcon = 'timer';
+        timingColor = '#d97706';
         baseEffect = 6.2 - ((responseTime - 5) * 0.08);
         retentionIncrease = 82 - ((responseTime - 5) * 1.5);
     } else {
         timingCategory = '滞后补救';
-        timingColor = 'text-orange-600';
+        timingIcon = 'hourglass';
+        timingColor = '#dc2626';
         baseEffect = 4.2 - ((responseTime - 30) * 0.04);
         retentionIncrease = 45 - ((responseTime - 30) * 0.7);
     }
     
-    // Adjust based on severity
+    // 根据严重程度调整
     let severityMultiplier = 1.0;
     let severityText = '';
     let compensationLevel = '';
@@ -425,7 +423,7 @@ function calculateTimingEffect() {
     } else if (severity === 'medium') {
         severityMultiplier = 1.0;
         severityText = '中等失败';
-        compensationLevel = '中等补偿（20-50元优惠券或运费券）';
+        compensationLevel = '中等补偿（20-50元优惠券）';
     } else {
         severityMultiplier = 0.85;
         severityText = '严重失败';
@@ -435,99 +433,113 @@ function calculateTimingEffect() {
     const finalEffect = (baseEffect * severityMultiplier).toFixed(1);
     const finalRetention = Math.max(0, Math.round(retentionIncrease * severityMultiplier));
     
-    // Generate recommendations based on timing
+    // 根据时机生成建议
     let recommendations = '';
     if (responseTime <= 5) {
         recommendations = `
-            <li class="flex items-start mb-2">
-                <i data-lucide="zap" class="w-5 h-5 text-green-600 mr-2 mt-0.5"></i>
+            <li class="flex items-start mb-3">
+                <i data-lucide="zap" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #16a34a;"></i>
                 <span>立即触发自动补救流程，无需人工审批</span>
             </li>
-            <li class="flex items-start mb-2">
-                <i data-lucide="message-square" class="w-5 h-5 text-green-600 mr-2 mt-0.5"></i>
+            <li class="flex items-start mb-3">
+                <i data-lucide="message-square" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #667eea;"></i>
                 <span>主动发送："我注意到刚才可能没有完全解决您的问题，让我重新为您处理"</span>
             </li>
-            <li class="flex items-start mb-2">
-                <i data-lucide="gift" class="w-5 h-5 text-green-600 mr-2 mt-0.5"></i>
+            <li class="flex items-start mb-3">
+                <i data-lucide="gift" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #ec4899;"></i>
                 <span>即时补偿：${compensationLevel}</span>
             </li>
-            <li class="flex items-start mb-2">
-                <i data-lucide="phone-forwarded" class="w-5 h-5 text-green-600 mr-2 mt-0.5"></i>
+            <li class="flex items-start mb-3">
+                <i data-lucide="phone-forwarded" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #f59e0b;"></i>
                 <span>提供"立即转人工"按钮，0等待优先接入</span>
             </li>
         `;
     } else if (responseTime <= 30) {
         recommendations = `
-            <li class="flex items-start mb-2">
-                <i data-lucide="heart" class="w-5 h-5 text-yellow-600 mr-2 mt-0.5"></i>
+            <li class="flex items-start mb-3">
+                <i data-lucide="heart" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #ec4899;"></i>
                 <span>情感安抚："非常抱歉让您久等了，我们完全理解您的着急心情"</span>
             </li>
-            <li class="flex items-start mb-2">
-                <i data-lucide="trending-up" class="w-5 h-5 text-yellow-600 mr-2 mt-0.5"></i>
+            <li class="flex items-start mb-3">
+                <i data-lucide="trending-up" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #667eea;"></i>
                 <span>升级补偿：${compensationLevel}（比即时补救提高30%）</span>
             </li>
-            <li class="flex items-start mb-2">
-                <i data-lucide="user-check" class="w-5 h-5 text-yellow-600 mr-2 mt-0.5"></i>
+            <li class="flex items-start mb-3">
+                <i data-lucide="user-check" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #16a34a;"></i>
                 <span>安排高级客服专员一对一跟进处理</span>
             </li>
-            <li class="flex items-start mb-2">
-                <i data-lucide="clock" class="w-5 h-5 text-yellow-600 mr-2 mt-0.5"></i>
+            <li class="flex items-start mb-3">
+                <i data-lucide="clock" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #f59e0b;"></i>
                 <span>明确承诺："我们将在15分钟内为您彻底解决"</span>
             </li>
         `;
     } else {
         recommendations = `
-            <li class="flex items-start mb-2">
-                <i data-lucide="alert-triangle" class="w-5 h-5 text-orange-600 mr-2 mt-0.5"></i>
+            <li class="flex items-start mb-3">
+                <i data-lucide="alert-triangle" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #dc2626;"></i>
                 <span>高层级道歉：由客服主管或经理级别致歉</span>
             </li>
-            <li class="flex items-start mb-2">
-                <i data-lucide="award" class="w-5 h-5 text-orange-600 mr-2 mt-0.5"></i>
+            <li class="flex items-start mb-3">
+                <i data-lucide="award" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #667eea;"></i>
                 <span>超值补偿：${compensationLevel}（比即时补救提高100%）</span>
             </li>
-            <li class="flex items-start mb-2">
-                <i data-lucide="phone-call" class="w-5 h-5 text-orange-600 mr-2 mt-0.5"></i>
+            <li class="flex items-start mb-3">
+                <i data-lucide="phone-call" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #ec4899;"></i>
                 <span>主动外呼：客服主动致电用户，展现高度重视</span>
             </li>
-            <li class="flex items-start mb-2">
-                <i data-lucide="repeat" class="w-5 h-5 text-orange-600 mr-2 mt-0.5"></i>
-                <span>后续跟踪：24小时后回访，确保问题彻底解决并收集反馈</span>
+            <li class="flex items-start mb-3">
+                <i data-lucide="repeat" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" style="color: #16a34a;"></i>
+                <span>后续跟踪：24小时后回访，确保问题彻底解决</span>
             </li>
         `;
     }
     
     contentDiv.innerHTML = `
-        <div class="mb-4">
-            <div class="text-sm text-gray-600 mb-1">补救时机评估</div>
-            <div class="text-2xl font-bold ${timingColor}">${timingCategory} (${responseTime}分钟)</div>
+        <div class="flex items-center gap-3 mb-4">
+            <div class="icon-box" style="background: ${timingColor}; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                <i data-lucide="${timingIcon}" style="color: white;"></i>
+            </div>
+            <div>
+                <div class="text-sm text-gray-500">补救时机评估</div>
+                <div class="text-2xl font-bold" style="color: ${timingColor};">${timingCategory}</div>
+            </div>
         </div>
         
         <div class="grid grid-cols-2 gap-4 mb-4">
-            <div>
-                <div class="text-sm text-gray-600 mb-1">预期留存提升</div>
-                <div class="text-3xl font-bold text-purple-600">+${finalRetention}%</div>
+            <div class="p-4 rounded-xl text-center" style="background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);">
+                <div class="text-sm text-gray-500 mb-1">预期留存提升</div>
+                <div class="text-3xl font-bold" style="color: #667eea;">+${finalRetention}%</div>
             </div>
-            <div>
-                <div class="text-sm text-gray-600 mb-1">补救效果评分</div>
-                <div class="text-3xl font-bold text-purple-600">${finalEffect}/7.0</div>
+            <div class="p-4 rounded-xl text-center" style="background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);">
+                <div class="text-sm text-gray-500 mb-1">补救效果评分</div>
+                <div class="text-3xl font-bold" style="color: #0891b2;">${finalEffect}/7.0</div>
             </div>
         </div>
         
-        <div class="mb-4">
-            <div class="text-sm text-gray-600 mb-1">失败严重程度</div>
-            <div class="text-lg font-semibold text-gray-800">${severityText}</div>
+        <div class="mb-4 p-3 rounded-lg" style="background: #f1f5f9;">
+            <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-600">失败严重程度</span>
+                <span class="font-semibold text-gray-800">${severityText}</span>
+            </div>
         </div>
         
         <div class="mt-6">
-            <div class="text-sm text-gray-600 mb-3 font-semibold">推荐补救措施</div>
-            <ul class="space-y-2">
+            <div class="text-sm text-gray-500 mb-3 font-medium flex items-center gap-2">
+                <i data-lucide="list-checks" class="w-4 h-4"></i>
+                推荐补救措施
+            </div>
+            <ul class="space-y-1">
                 ${recommendations}
             </ul>
         </div>
         
-        <div class="mt-6 p-4 ${responseTime <= 5 ? 'bg-green-50' : responseTime <= 30 ? 'bg-yellow-50' : 'bg-orange-50'} rounded-lg">
-            <div class="flex items-start">
-                <i data-lucide="info" class="w-5 h-5 ${responseTime <= 5 ? 'text-green-600' : responseTime <= 30 ? 'text-yellow-600' : 'text-orange-600'} mr-2 mt-0.5"></i>
+        <div class="mt-6 p-4 rounded-xl" style="background: ${
+            responseTime <= 5 ? 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)' : 
+            responseTime <= 30 ? 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)' : 
+            'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)'
+        };">
+            <div class="flex items-start gap-3">
+                <i data-lucide="info" class="w-5 h-5 flex-shrink-0" style="color: ${timingColor};"></i>
                 <div class="text-sm text-gray-700">
                     <strong>时机建议：</strong>${
                         responseTime <= 5 
@@ -542,17 +554,7 @@ function calculateTimingEffect() {
     `;
     
     resultDiv.classList.remove('hidden');
-    resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     
-    // Reinitialize icons
+    // 重新初始化图标
     lucide.createIcons();
 }
-
-// Add click handlers for nav links
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href').substring(1);
-        scrollToSection(targetId);
-    });
-});

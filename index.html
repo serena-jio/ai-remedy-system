@@ -3,606 +3,908 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>智能补救系统 - 时机预测、类型识别、策略推荐三位一体</title>
+    <title>智能服务补救系统</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
         
+        * {
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Noto Sans SC', sans-serif;
+            margin: 0;
+            padding: 0;
         }
         
+        /* 页面容器 */
+        .page-container {
+            min-height: 100vh;
+            padding-bottom: 80px; /* 为底部导航留空间 */
+        }
+        
+        /* 页面切换动画 */
+        .page-section {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .page-section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 渐变背景 */
         .gradient-bg {
-            background: linear-gradient(135deg, #94B8D9 0%, #53AEDB 100%);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
         }
         
+        .hero-gradient {
+            background: linear-gradient(135deg, #6492d6 0%, #9381a5 100%);
+        }
+        
+        /* 卡片悬停效果 */
         .card-hover {
             transition: all 0.3s ease;
         }
         
         .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
         
-        .fade-in {
-            animation: fadeIn 0.6s ease-in;
+        /* 底部导航栏 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 12px;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 12px;
+            min-width: 60px;
+        }
+        
+        .bottom-nav-item:hover {
+            background: #f1f5f9;
+        }
+        
+        .bottom-nav-item.active {
+            color: #667eea;
+            background: #eef2ff;
+        }
+        
+        .bottom-nav-item i {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+        }
+        
+        .bottom-nav-item span {
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        /* 顶部导航（桌面端） */
+        .desktop-nav {
+            display: none;
+        }
+        
+        @media (min-width: 768px) {
+            .desktop-nav {
+                display: flex;
+                align-items: center;
+                gap: 32px;
+            }
+            
+            .bottom-nav {
+                display: none;
+            }
+            
+            .page-container {
+                padding-bottom: 0;
+            }
         }
         
         .nav-link {
             position: relative;
-            transition: color 0.3s ease;
+            padding: 8px 0;
+            color: #475569;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            text-decoration: none;
+        }
+        
+        .nav-link:hover {
+            color: #667eea;
+        }
+        
+        .nav-link.active {
+            color: #667eea;
         }
         
         .nav-link::after {
             content: '';
             position: absolute;
-            bottom: -2px;
+            bottom: 0;
             left: 0;
             width: 0;
             height: 2px;
-            background: #53AEDB;
-            transition: width 0.3s ease;
+            background: #667eea;
+            transition: width 0.2s ease;
         }
         
-        .nav-link:hover::after,
-        .nav-link.active::after {
+        .nav-link.active::after,
+        .nav-link:hover::after {
             width: 100%;
         }
         
+        /* 统计卡片 */
         .stat-card {
-            background: linear-gradient(135deg, rgba(208, 228, 242, 0.3) 0%, rgba(148, 184, 217, 0.3) 100%);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.2);
         }
         
-        /* Mobile optimizations */
-        @media (max-width: 768px) {
-            .mobile-menu {
-                display: none;
+        /* 按钮样式 */
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #475569;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+        
+        /* 表单样式 */
+        .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.2s ease;
+            outline: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 44px;
+        }
+        
+        .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        /* 滑块样式 */
+        .form-range {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #e2e8f0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .form-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* 结果卡片 */
+        .result-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-left: 4px solid #667eea;
+            border-radius: 12px;
+        }
+        
+        /* 图标容器 */
+        .icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .icon-box.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .icon-box.warm {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .icon-box.cool {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .icon-box.soft {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+        
+        .icon-box i {
+            color: white;
+            width: 24px;
+            height: 24px;
+        }
+        
+        /* 时间线卡片 */
+        .timing-card {
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .timing-card:hover {
+            transform: scale(1.02);
+        }
+        
+        .timing-card.excellent {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-left: 4px solid #10b981;
+        }
+        
+        .timing-card.good {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .timing-card.poor {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border-left: 4px solid #ef4444;
+        }
+        
+        /* 架构卡片 */
+        .arch-card {
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+        
+        .arch-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 动画 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        
+        /* 响应式优化 */
+        @media (max-width: 640px) {
+            .stat-card {
+                padding: 16px !important;
             }
             
-            .mobile-menu.active {
-                display: block;
-            }
-            
-            h1 {
-                font-size: 2rem !important;
-                line-height: 1.2;
-            }
-            
-            h2 {
+            .stat-card .text-3xl {
                 font-size: 1.5rem !important;
             }
             
-            h3 {
+            h1 {
+                font-size: 1.75rem !important;
+            }
+            
+            h2 {
                 font-size: 1.25rem !important;
             }
             
-            .hero-subtitle {
-                font-size: 1rem !important;
+            h3 {
+                font-size: 1.125rem !important;
             }
             
-            .nav-link {
-                font-size: 0.875rem;
-                padding: 0.5rem;
+            .page-section {
+                padding: 16px !important;
             }
             
-            .card-hover:hover {
-                transform: none;
-            }
-            
-            /* 优化按钮在移动端的显示 */
-            button {
-                font-size: 1rem !important;
-                padding: 0.75rem 1.5rem !important;
-            }
-            
-            /* 优化表单元素 */
-            select, input[type="range"] {
-                font-size: 16px !important; /* 防止iOS自动缩放 */
-            }
-            
-            /* 优化图表容器 */
             canvas {
-                max-height: 250px !important;
+                max-height: 220px !important;
             }
         }
         
-        /* 汉堡菜单按钮 */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            padding: 0.5rem;
+        /* Hero 区域 */
+        .hero-section {
+            padding: 32px 16px;
+            text-align: center;
+            color: white;
         }
         
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: #53AEDB;
-            margin: 3px 0;
-            transition: 0.3s;
-            border-radius: 2px;
-        }
-        
-        @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-            
-            .desktop-nav {
-                display: none;
+        @media (min-width: 768px) {
+            .hero-section {
+                padding: 64px 32px;
             }
         }
         
-        @media (min-width: 769px) {
-            .mobile-nav {
-                display: none;
-            }
+        /* 隐藏的桌面端Logo区域 */
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-area i {
+            color: #667eea;
         }
     </style>
 </head>
-<body style="background-color: #F9EED7;">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
+<body style="background-color: #f8fafc;">
+    <!-- 顶部导航 -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <i data-lucide="bot" class="w-6 h-6 sm:w-8 sm:h-8 mr-2 sm:mr-3" style="color: #53AEDB;"></i>
-                    <span class="text-base sm:text-xl font-bold text-gray-800">智能补救系统</span>
+                <div class="logo-area">
+                    <i data-lucide="heart-handshake" class="w-7 h-7"></i>
+                    <span class="text-lg font-bold text-gray-800">智能服务补救</span>
                 </div>
                 
-                <!-- Desktop Navigation -->
-                <div class="desktop-nav flex items-center space-x-8">
-                    <a href="#home" class="nav-link active text-gray-700 font-medium" style="--hover-color: #53AEDB;">首页</a>
-                    <a href="#demo" class="nav-link text-gray-700 font-medium" style="--hover-color: #53AEDB;">智能推荐</a>
-                    <a href="#timing" class="nav-link text-gray-700 font-medium" style="--hover-color: #53AEDB;">时机计算</a>
-                    <a href="#research" class="nav-link text-gray-700 font-medium" style="--hover-color: #53AEDB;">研究发现</a>
-                    <a href="#system" class="nav-link text-gray-700 font-medium" style="--hover-color: #53AEDB;">系统架构</a>
+                <!-- 桌面端导航 -->
+                <div class="desktop-nav">
+                    <a href="#" class="nav-link active" data-page="home">首页</a>
+                    <a href="#" class="nav-link" data-page="demo">策略推荐</a>
+                    <a href="#" class="nav-link" data-page="timing">时机分析</a>
+                    <a href="#" class="nav-link" data-page="research">研究发现</a>
+                    <a href="#" class="nav-link" data-page="system">系统介绍</a>
                 </div>
-                
-                <!-- Mobile Hamburger Menu -->
-                <div class="hamburger" onclick="toggleMobileMenu()">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-            
-            <!-- Mobile Menu -->
-            <div id="mobileMenu" class="mobile-nav mobile-menu pb-4">
-                <a href="#home" onclick="closeMobileMenu()" class="block py-2 text-gray-700 font-medium border-b border-gray-200" onmouseover="this.style.color='#53AEDB'" onmouseout="this.style.color=''">首页</a>
-                <a href="#demo" onclick="closeMobileMenu()" class="block py-2 text-gray-700 font-medium border-b border-gray-200" onmouseover="this.style.color='#53AEDB'" onmouseout="this.style.color=''">智能推荐</a>
-                <a href="#timing" onclick="closeMobileMenu()" class="block py-2 text-gray-700 font-medium border-b border-gray-200" onmouseover="this.style.color='#53AEDB'" onmouseout="this.style.color=''">时机计算</a>
-                <a href="#research" onclick="closeMobileMenu()" class="block py-2 text-gray-700 font-medium border-b border-gray-200" onmouseover="this.style.color='#53AEDB'" onmouseout="this.style.color=''">研究发现</a>
-                <a href="#system" onclick="closeMobileMenu()" class="block py-2 text-gray-700 font-medium" onmouseover="this.style.color='#53AEDB'" onmouseout="this.style.color=''">系统架构</a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="gradient-bg text-white py-12 sm:py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center fade-in">
-                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">智能补救系统</h1>
-                <p class="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 hero-subtitle px-4" style="color: rgba(255, 255, 255, 0.9);">时机预测、类型识别、策略推荐三位一体</p>
-                <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 px-4">
-                    <button onclick="scrollToSection('demo')" class="bg-white px-6 sm:px-8 py-3 rounded-lg font-semibold transition shadow-lg w-full sm:w-auto" style="color: #53AEDB;" onmouseover="this.style.backgroundColor='#F2D4CE'" onmouseout="this.style.backgroundColor='white'">
-                        🎯 立即体验智能推荐
-                    </button>
-                    <button onclick="scrollToSection('timing')" class="text-white px-6 sm:px-8 py-3 rounded-lg font-semibold transition w-full sm:w-auto" style="background-color: #94B8D9;" onmouseover="this.style.backgroundColor='#53AEDB'" onmouseout="this.style.backgroundColor='#94B8D9'">
-                        ⏱️ 时机效果计算
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Key Statistics -->
-    <section class="py-16" style="background-color: #F9EED7;">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="stat-card p-6 rounded-lg text-center card-hover">
-                    <div class="text-4xl font-bold mb-2" style="color: #53AEDB;">15,000</div>
-                    <div class="text-gray-600">真实评论数据</div>
-                </div>
-                <div class="stat-card p-6 rounded-lg text-center card-hover">
-                    <div class="text-4xl font-bold mb-2" style="color: #53AEDB;">1,830</div>
-                    <div class="text-gray-600">实验样本量</div>
-                </div>
-                <div class="stat-card p-6 rounded-lg text-center card-hover">
-                    <div class="text-4xl font-bold mb-2" style="color: #53AEDB;">92.3%</div>
-                    <div class="text-gray-600">失败识别准确率</div>
-                </div>
-                <div class="stat-card p-6 rounded-lg text-center card-hover">
-                    <div class="text-4xl font-bold mb-2" style="color: #53AEDB;">78.3%</div>
-                    <div class="text-gray-600">能力螺旋解释力</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Interactive Demo -->
-    <section id="demo" class="py-16" style="background: linear-gradient(to bottom right, #D0E4F2, #F2D4CE);">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-8">
-                <h2 class="text-4xl font-bold text-gray-800 mb-4">🎯 智能补救策略推荐系统</h2>
-                <p class="text-lg text-gray-600">基于15,000条真实数据训练，准确率92.3%的智能决策引擎</p>
-            </div>
-            
-            <div class="bg-white rounded-xl shadow-2xl p-8" style="border-top: 4px solid #53AEDB;">
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">选择服务失败类型</label>
-                    <select id="failureType" class="w-full px-4 py-2 border border-gray-300 rounded-lg" style="outline: none;" onfocus="this.style.borderColor='#53AEDB'; this.style.boxShadow='0 0 0 2px rgba(83, 174, 219, 0.2)'" onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
-                        <option value="technical">技术性失败 (理解错误、无法解决问题)</option>
-                        <option value="interaction">互动性失败 (态度冷漠、缺乏关怀)</option>
-                    </select>
-                </div>
-
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">选择用户类型</label>
-                    <select id="userType" class="w-full px-4 py-2 border border-gray-300 rounded-lg" style="outline: none;" onfocus="this.style.borderColor='#53AEDB'; this.style.boxShadow='0 0 0 2px rgba(83, 174, 219, 0.2)'" onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
-                        <option value="rational">技术理性型 (注重问题解决)</option>
-                        <option value="emotional">情感敏感型 (注重情感互动)</option>
-                        <option value="balanced">平衡务实型 (兼顾能力与情感)</option>
-                        <option value="low">低卷入型 (低情感投入)</option>
-                    </select>
-                </div>
-
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">拟人化程度</label>
-                    <div class="flex items-center space-x-4">
-                        <input type="range" id="anthropomorphism" min="0" max="100" value="50" class="w-full">
-                        <span id="anthropomorphismValue" class="text-gray-700 font-medium">50%</span>
-                    </div>
-                </div>
-
-                <button onclick="generateRecommendation()" class="w-full text-white py-4 rounded-lg font-bold text-lg transition shadow-lg" style="background: linear-gradient(to right, #94B8D9, #53AEDB);" onmouseover="this.style.background='linear-gradient(to right, #53AEDB, #94B8D9)'" onmouseout="this.style.background='linear-gradient(to right, #94B8D9, #53AEDB)'">
-                    🚀 生成智能推荐
-                </button>
-
-                <div id="recommendation" class="mt-8 hidden">
-                    <div class="p-6 rounded-lg" style="background: linear-gradient(to right, #D0E4F2, #F2D4CE); border-left: 4px solid #53AEDB;">
-                        <h3 class="text-xl font-bold mb-4 text-gray-800">推荐补救策略</h3>
-                        <div id="recommendationContent"></div>
+    <div class="page-container">
+        <!-- 首页 -->
+        <section id="page-home" class="page-section active">
+            <!-- Hero -->
+            <div class="hero-section hero-gradient">
+                <div class="max-w-4xl mx-auto fade-in-up">
+                    <h1 class="text-3xl md:text-5xl font-bold mb-4">智能服务补救系统</h1>
+                    <p class="text-base md:text-xl mb-8 opacity-90">基于真实数据研究，帮助您找到最合适的服务补救策略</p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4 px-4">
+                        <button onclick="switchPage('demo')" class="btn-primary flex items-center justify-center gap-2">
+                            <i data-lucide="sparkles" class="w-5 h-5"></i>
+                            开始智能推荐
+                        </button>
+                        <button onclick="switchPage('timing')" class="btn-secondary flex items-center justify-center gap-2">
+                            <i data-lucide="clock" class="w-5 h-5"></i>
+                            补救时机分析
+                        </button>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Research Findings -->
-    <section id="research" class="py-16" style="background-color: #F9EED7;">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">核心研究发现</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                <div class="bg-white p-6 rounded-lg shadow-lg card-hover">
-                    <div class="flex items-center mb-4">
-                        <i data-lucide="target" class="w-8 h-8 mr-3" style="color: #53AEDB;"></i>
-                        <h3 class="text-xl font-bold text-gray-800">非对称匹配效应</h3>
-                    </div>
-                    <p class="text-gray-600 mb-4">技术性失败场景下能力导向补救效果最优，互动性失败场景下情感导向补救更具优势。</p>
-                    <div class="p-4 rounded" style="background-color: #D0E4F2;">
-                        <div class="text-sm text-gray-700 mb-2">技术性失败 × 能力补救</div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div class="h-2 rounded-full" style="width: 85%; background-color: #53AEDB;"></div>
+            <!-- 关键数据 -->
+            <div class="py-12 px-4">
+                <div class="max-w-7xl mx-auto">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                        <div class="stat-card p-5 rounded-xl text-center card-hover">
+                            <i data-lucide="message-square-text" class="w-8 h-8 mx-auto mb-3" style="color: #667eea;"></i>
+                            <div class="text-2xl md:text-3xl font-bold mb-1" style="color: #667eea;">15,000</div>
+                            <div class="text-sm text-gray-500">真实评论数据</div>
+                        </div>
+                        <div class="stat-card p-5 rounded-xl text-center card-hover">
+                            <i data-lucide="users" class="w-8 h-8 mx-auto mb-3" style="color: #667eea;"></i>
+                            <div class="text-2xl md:text-3xl font-bold mb-1" style="color: #667eea;">1,830</div>
+                            <div class="text-sm text-gray-500">实验样本量</div>
+                        </div>
+                        <div class="stat-card p-5 rounded-xl text-center card-hover">
+                            <i data-lucide="target" class="w-8 h-8 mx-auto mb-3" style="color: #667eea;"></i>
+                            <div class="text-2xl md:text-3xl font-bold mb-1" style="color: #667eea;">92.3%</div>
+                            <div class="text-sm text-gray-500">识别准确率</div>
+                        </div>
+                        <div class="stat-card p-5 rounded-xl text-center card-hover">
+                            <i data-lucide="trending-up" class="w-8 h-8 mx-auto mb-3" style="color: #667eea;"></i>
+                            <div class="text-2xl md:text-3xl font-bold mb-1" style="color: #667eea;">78.3%</div>
+                            <div class="text-sm text-gray-500">解释力</div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="bg-white p-6 rounded-lg shadow-lg card-hover">
-                    <div class="flex items-center mb-4">
-                        <i data-lucide="users" class="w-8 h-8 mr-3" style="color: #F2A399;"></i>
-                        <h3 class="text-xl font-bold text-gray-800">拟人化双刃剑</h3>
-                    </div>
-                    <p class="text-gray-600 mb-4">高拟人化在技术性失败中提升留存，在互动性失败中反而降低留存意愿。</p>
-                    <div class="p-4 rounded" style="background-color: #F2D4CE;">
-                        <div class="text-sm text-gray-700 mb-2">拟人化效应差异</div>
-                        <div class="flex justify-between text-xs text-gray-600">
-                            <span>技术失败: +17.2%</span>
-                            <span>互动失败: -12.4%</span>
+            <!-- 核心发现预览 -->
+            <div class="py-12 px-4" style="background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);">
+                <div class="max-w-7xl mx-auto">
+                    <h2 class="text-2xl font-bold text-center mb-8 text-gray-800">核心研究发现</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-white p-6 rounded-xl shadow-sm card-hover">
+                            <div class="flex items-center mb-4">
+                                <div class="icon-box primary mr-4">
+                                    <i data-lucide="link"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-800">匹配效应</h3>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-4">不同类型的失败需要匹配对应的补救策略，才能达到最佳效果。</p>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-500">效果提升</span>
+                                <span class="font-bold text-green-600">+85%</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-xl shadow-sm card-hover">
+                            <div class="flex items-center mb-4">
+                                <div class="icon-box warm mr-4">
+                                    <i data-lucide="scale"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-800">拟人化平衡</h3>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-4">拟人化程度需要根据场景灵活调整，过高或过低都可能影响效果。</p>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-500">场景差异</span>
+                                <span class="font-bold text-amber-600">±17%</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-xl shadow-sm card-hover">
+                            <div class="flex items-center mb-4">
+                                <div class="icon-box cool mr-4">
+                                    <i data-lucide="git-merge"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-800">双路径机制</h3>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-4">能力感知与情感温暖是影响用户留存的两大核心心理机制。</p>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-500">解释力</span>
+                                <span class="font-bold text-blue-600">75%+</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-lg shadow-lg card-hover">
-                    <div class="flex items-center mb-4">
-                        <i data-lucide="git-branch" class="w-8 h-8 mr-3" style="color: #94B8D9;"></i>
-                        <h3 class="text-xl font-bold text-gray-800">双螺旋路径</h3>
-                    </div>
-                    <p class="text-gray-600 mb-4">能力螺旋与温暖螺旋是服务失败影响消费者留存的核心心理机制。</p>
-                    <div class="p-4 rounded" style="background-color: #D0E4F2;">
-                        <div class="text-sm text-gray-700 mb-1">能力螺旋: 78.3%</div>
-                        <div class="text-sm text-gray-700">温暖螺旋: 72.5%</div>
+                    
+                    <div class="text-center mt-8">
+                        <button onclick="switchPage('research')" class="text-gray-600 hover:text-gray-800 font-medium flex items-center gap-2 mx-auto">
+                            <span>查看更多研究发现</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Charts Section -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white p-6 rounded-lg shadow-lg">
-                    <h3 class="text-lg font-bold mb-4 text-gray-800">服务失败类型分布</h3>
-                    <canvas id="failureTypeChart"></canvas>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-lg">
-                    <h3 class="text-lg font-bold mb-4 text-gray-800">补救策略效果对比</h3>
-                    <canvas id="remedyEffectChart"></canvas>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Remedy Timing Section -->
-    <section id="timing" class="py-16" style="background-color: #F9EED7;">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">补救时机分析</h2>
-            <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
-                补救时机是影响补救效果的关键因素。研究表明，及时补救可显著提升用户满意度，而延迟补救则会加剧负面情绪。
-            </p>
-            
-            <!-- Timing Importance -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                <div class="p-6 rounded-lg card-hover" style="background: linear-gradient(to bottom right, #F2D4CE, #F2A399); border-left: 4px solid #F2A399;">
-                    <div class="flex items-center mb-4">
-                        <i data-lucide="alert-circle" class="w-8 h-8 mr-3" style="color: #F2A399;"></i>
-                        <h3 class="text-xl font-bold text-gray-800">即时补救</h3>
-                    </div>
-                    <div class="text-3xl font-bold mb-2" style="color: #F2A399;">0-5分钟</div>
-                    <p class="text-gray-700 mb-3">黄金补救窗口期</p>
-                    <ul class="text-sm text-gray-600 space-y-2">
-                        <li>• 用户情绪尚未激化</li>
-                        <li>• 问题记忆清晰</li>
-                        <li>• 补救成功率最高</li>
-                        <li>• 留存提升: <strong>+92%</strong></li>
-                    </ul>
-                </div>
-
-                <div class="p-6 rounded-lg card-hover" style="background: linear-gradient(to bottom right, #F9EED7, #F2D4CE); border-left: 4px solid #94B8D9;">
-                    <div class="flex items-center mb-4">
-                        <i data-lucide="clock" class="w-8 h-8 mr-3" style="color: #94B8D9;"></i>
-                        <h3 class="text-xl font-bold text-gray-800">延迟补救</h3>
-                    </div>
-                    <div class="text-3xl font-bold mb-2" style="color: #94B8D9;">5-30分钟</div>
-                    <p class="text-gray-700 mb-3">补救效果递减期</p>
-                    <ul class="text-sm text-gray-600 space-y-2">
-                        <li>• 用户耐心逐渐消耗</li>
-                        <li>• 负面情绪开始累积</li>
-                        <li>• 需要更强补救措施</li>
-                        <li>• 留存提升: <strong>+58%</strong></li>
-                    </ul>
-                </div>
-
-                <div class="p-6 rounded-lg card-hover" style="background: linear-gradient(to bottom right, #D0E4F2, #94B8D9); border-left: 4px solid #53AEDB;">
-                    <div class="flex items-center mb-4">
-                        <i data-lucide="x-circle" class="w-8 h-8 mr-3" style="color: #53AEDB;"></i>
-                        <h3 class="text-xl font-bold text-gray-800">滞后补救</h3>
-                    </div>
-                    <div class="text-3xl font-bold mb-2" style="color: #53AEDB;">&gt;30分钟</div>
-                    <p class="text-gray-700 mb-3">补救效果微弱期</p>
-                    <ul class="text-sm text-gray-600 space-y-2">
-                        <li>• 用户已产生强烈不满</li>
-                        <li>• 可能已转向竞品</li>
-                        <li>• 补救难度大幅提升</li>
-                        <li>• 留存提升: <strong>+23%</strong></li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Timing Strategy Chart -->
-            <div class="bg-white p-6 rounded-lg shadow-lg mb-12">
-                <h3 class="text-lg font-bold mb-4 text-gray-800">补救时机与效果关系</h3>
-                <canvas id="timingEffectChart"></canvas>
-            </div>
-
-            <!-- Timing Recommendations -->
-            <div class="p-8 rounded-lg" style="background: linear-gradient(to right, #D0E4F2, #F2D4CE);">
-                <h3 class="text-2xl font-bold mb-6 text-gray-800 text-center">不同时机的补救建议</h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <div class="flex items-center mb-4">
-                            <div class="w-3 h-3 rounded-full mr-3" style="background-color: #53AEDB;"></div>
-                            <h4 class="text-lg font-bold text-gray-800">即时补救策略 (0-5分钟)</h4>
-                        </div>
-                        <ul class="space-y-3 text-gray-700">
-                            <li class="flex items-start">
-                                <i data-lucide="zap" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #53AEDB;"></i>
-                                <span><strong>快速响应：</strong>AI自动识别失败，立即触发补救流程</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i data-lucide="message-circle" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #53AEDB;"></i>
-                                <span><strong>主动沟通：</strong>"我注意到刚才的回答可能没有解决您的问题"</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i data-lucide="gift" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #53AEDB;"></i>
-                                <span><strong>即时补偿：</strong>自动发放小额优惠券或积分</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i data-lucide="arrow-right-circle" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #53AEDB;"></i>
-                                <span><strong>无缝转接：</strong>提供"立即转人工"选项，0等待接入</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <div class="flex items-center mb-4">
-                            <div class="w-3 h-3 rounded-full mr-3" style="background-color: #94B8D9;"></div>
-                            <h4 class="text-lg font-bold text-gray-800">延迟补救策略 (5-30分钟)</h4>
-                        </div>
-                        <ul class="space-y-3 text-gray-700">
-                            <li class="flex items-start">
-                                <i data-lucide="heart" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #94B8D9;"></i>
-                                <span><strong>情感安抚：</strong>"非常抱歉让您久等，我们理解您的着急"</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i data-lucide="trending-up" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #94B8D9;"></i>
-                                <span><strong>升级补偿：</strong>提供更高价值的补偿方案（如折扣券、运费券）</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i data-lucide="user-check" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #94B8D9;"></i>
-                                <span><strong>专人跟进：</strong>安排高级客服专员一对一处理</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i data-lucide="shield-check" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #94B8D9;"></i>
-                                <span><strong>承诺保障：</strong>明确解决时间节点，建立信任</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <div class="flex items-center mb-4">
-                            <div class="w-3 h-3 rounded-full mr-3" style="background-color: #F2A399;"></div>
-                            <h4 class="text-lg font-bold text-gray-800">滞后补救策略 (&gt;30分钟)</h4>
-                        </div>
-                        <ul class="space-y-3 text-gray-700">
-                            <li class="flex items-start">
-                                <i data-lucide="alert-triangle" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #F2A399;"></i>
-                                <span><strong>诚恳道歉：</strong>高层级道歉，承认服务不足</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i data-lucide="award" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #F2A399;"></i>
-                                <span><strong>超值补偿：</strong>提供超出预期的补偿（如大额优惠、VIP权益）</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i data-lucide="phone-call" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #F2A399;"></i>
-                                <span><strong>主动外呼：</strong>客服主动致电用户，展现重视</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i data-lucide="repeat" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #F2A399;"></i>
-                                <span><strong>长期跟踪：</strong>后续回访，确保问题彻底解决</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <div class="flex items-center mb-4">
-                            <div class="w-3 h-3 rounded-full mr-3" style="background-color: #53AEDB;"></div>
-                            <h4 class="text-lg font-bold text-gray-800">预防性补救 (失败前)</h4>
-                        </div>
-                        <ul class="space-y-3 text-gray-700">
-                            <li class="flex items-start">
-                                <i data-lucide="eye" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #53AEDB;"></i>
-                                <span><strong>风险识别：</strong>AI实时监测对话情绪，预判失败风险</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i data-lucide="shield" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #53AEDB;"></i>
-                                <span><strong>主动干预：</strong>在失败发生前提供替代方案</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i data-lucide="users" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #53AEDB;"></i>
-                                <span><strong>智能转接：</strong>复杂问题自动转人工，避免AI失败</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i data-lucide="lightbulb" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" style="color: #53AEDB;"></i>
-                                <span><strong>期望管理：</strong>提前说明AI能力边界，降低期待落差</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Timing Calculator -->
-            <div class="mt-12 bg-white p-8 rounded-lg shadow-xl">
-                <h3 class="text-2xl font-bold mb-6 text-gray-800 text-center">补救时机效果计算器</h3>
+        <!-- 策略推荐 -->
+        <section id="page-demo" class="page-section">
+            <div class="py-8 px-4">
                 <div class="max-w-2xl mx-auto">
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">服务失败发生后的响应时间</label>
-                        <div class="flex items-center space-x-4">
-                            <input type="range" id="responseTime" min="0" max="60" value="5" class="w-full">
-                            <span id="responseTimeValue" class="text-gray-700 font-medium w-24 text-right">5 分钟</span>
+                    <div class="text-center mb-8">
+                        <div class="icon-box primary mx-auto mb-4">
+                            <i data-lucide="sparkles"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">智能补救策略推荐</h2>
+                        <p class="text-gray-600">根据您的场景，为您推荐最合适的补救策略</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                        <!-- 失败类型 -->
+                        <div class="mb-6">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
+                                <i data-lucide="alert-circle" class="w-4 h-4 text-amber-500"></i>
+                                服务失败类型
+                            </label>
+                            <select id="failureType" class="form-select">
+                                <option value="technical">技术性失败 - 理解错误、无法解决问题</option>
+                                <option value="interaction">互动性失败 - 态度问题、缺乏关怀</option>
+                            </select>
+                        </div>
+
+                        <!-- 用户类型 -->
+                        <div class="mb-6">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
+                                <i data-lucide="user" class="w-4 h-4 text-blue-500"></i>
+                                用户类型
+                            </label>
+                            <select id="userType" class="form-select">
+                                <option value="rational">理性型 - 注重问题解决效率</option>
+                                <option value="emotional">感性型 - 注重情感互动体验</option>
+                                <option value="balanced">平衡型 - 兼顾问题与体验</option>
+                                <option value="low">低卷入型 - 情感投入较低</option>
+                            </select>
+                        </div>
+
+                        <!-- 拟人化程度 -->
+                        <div class="mb-8">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
+                                <i data-lucide="sliders" class="w-4 h-4 text-purple-500"></i>
+                                拟人化程度
+                            </label>
+                            <div class="flex items-center gap-4">
+                                <i data-lucide="bot" class="w-5 h-5 text-gray-400"></i>
+                                <input type="range" id="anthropomorphism" min="0" max="100" value="50" class="form-range flex-1">
+                                <i data-lucide="smile" class="w-5 h-5 text-gray-400"></i>
+                            </div>
+                            <div class="text-center mt-2">
+                                <span id="anthropomorphismValue" class="text-sm font-medium text-gray-600">50%</span>
+                            </div>
+                        </div>
+
+                        <button onclick="generateRecommendation()" class="btn-primary w-full flex items-center justify-center gap-2">
+                            <i data-lucide="wand-2" class="w-5 h-5"></i>
+                            生成推荐策略
+                        </button>
+
+                        <!-- 推荐结果 -->
+                        <div id="recommendation" class="mt-8 hidden">
+                            <div class="result-card p-6">
+                                <div id="recommendationContent"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 时机分析 -->
+        <section id="page-timing" class="page-section">
+            <div class="py-8 px-4">
+                <div class="max-w-4xl mx-auto">
+                    <div class="text-center mb-8">
+                        <div class="icon-box cool mx-auto mb-4">
+                            <i data-lucide="clock"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">补救时机分析</h2>
+                        <p class="text-gray-600">时机决定补救效果，把握黄金窗口期</p>
+                    </div>
+
+                    <!-- 时机计算器 -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                            <i data-lucide="calculator" class="w-5 h-5 text-blue-500"></i>
+                            补救效果计算器
+                        </h3>
+                        
+                        <div class="mb-6">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
+                                <i data-lucide="timer" class="w-4 h-4 text-amber-500"></i>
+                                响应时间
+                            </label>
+                            <div class="flex items-center gap-4">
+                                <input type="range" id="responseTime" min="0" max="60" value="5" class="form-range flex-1">
+                                <span id="responseTimeValue" class="text-sm font-medium text-gray-600 w-16 text-right">5 分钟</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
+                                <i data-lucide="alert-triangle" class="w-4 h-4 text-red-500"></i>
+                                失败严重程度
+                            </label>
+                            <select id="severityLevel" class="form-select">
+                                <option value="low">轻微 - 理解偏差、回答不完整</option>
+                                <option value="medium" selected>中等 - 无法解决问题、多次尝试</option>
+                                <option value="high">严重 - 系统故障、造成损失</option>
+                            </select>
+                        </div>
+
+                        <button onclick="calculateTimingEffect()" class="btn-primary w-full flex items-center justify-center gap-2">
+                            <i data-lucide="chart-bar" class="w-5 h-5"></i>
+                            计算效果预测
+                        </button>
+
+                        <div id="timingResult" class="mt-6 hidden">
+                            <div class="result-card p-6">
+                                <div id="timingResultContent"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 时机卡片 -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                        <div class="timing-card excellent">
+                            <div class="flex items-center mb-3">
+                                <i data-lucide="zap" class="w-6 h-6 mr-2 text-emerald-500"></i>  <!-- 使用 emerald 替代 green -->
+                                <h3 class="text-lg font-bold text-gray-800">即时补救</h3>
+                            </div>
+                            <div class="text-2xl font-bold text-emerald-500 mb-2">0-5分钟</div>
+                            <p class="text-sm text-gray-600 mb-3">黄金补救窗口期</p>
+                            <ul class="text-xs text-gray-500 space-y-1">
+                                <li>• 用户情绪尚未激化</li>
+                                <li>• 问题记忆清晰</li>
+                                <li>• 留存提升: <strong class="text-emerald-500">+92%</strong></li>
+                            </ul>
+                        </div>
+                    
+                        <div class="timing-card good">
+                            <div class="flex items-center mb-3">
+                                <i data-lucide="timer" class="w-6 h-6 mr-2 text-orange-400"></i>  <!-- 使用 orange 替代 amber -->
+                                <h3 class="text-lg font-bold text-gray-800">延迟补救</h3>
+                            </div>
+                            <div class="text-2xl font-bold text-orange-500 mb-2">5-30分钟</div>
+                            <p class="text-sm text-gray-600 mb-3">效果递减期</p>
+                            <ul class="text-xs text-gray-500 space-y-1">
+                                <li>• 用户耐心逐渐消耗</li>
+                                <li>• 需要更强补救措施</li>
+                                <li>• 留存提升: <strong class="text-orange-500">+58%</strong></li>
+                            </ul>
+                        </div>
+                    
+                        <div class="timing-card poor">
+                            <div class="flex items-center mb-3">
+                                <i data-lucide="hourglass" class="w-6 h-6 mr-2 text-rose-400"></i>  <!-- 使用 rose 替代 red -->
+                                <h3 class="text-lg font-bold text-gray-800">滞后补救</h3>
+                            </div>
+                            <div class="text-2xl font-bold text-rose-500 mb-2">&gt;30分钟</div>
+                            <p class="text-sm text-gray-600 mb-3">效果微弱期</p>
+                            <ul class="text-xs text-gray-500 space-y-1">
+                                <li>• 用户已产生强烈不满</li>
+                                <li>• 补救难度大幅提升</li>
+                                <li>• 留存提升: <strong class="text-rose-500">+23%</strong></li>
+                            </ul>
                         </div>
                     </div>
 
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">失败严重程度</label>
-                        <select id="severityLevel" class="w-full px-4 py-2 border border-gray-300 rounded-lg" style="outline: none;" onfocus="this.style.borderColor='#53AEDB'; this.style.boxShadow='0 0 0 2px rgba(83, 174, 219, 0.2)'" onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
-                            <option value="low">轻微 (理解偏差、回答不完整)</option>
-                            <option value="medium" selected>中等 (无法解决问题、多次失败)</option>
-                            <option value="high">严重 (系统故障、造成损失)</option>
-                        </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- 研究发现 -->
+        <section id="page-research" class="page-section">
+            <div class="py-8 px-4">
+                <div class="max-w-7xl mx-auto">
+                    <div class="text-center mb-8">
+                        <div class="icon-box warm mx-auto mb-4">
+                            <i data-lucide="flask-conical"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">研究发现</h2>
+                        <p class="text-gray-600">基于1,830份实验样本和15,000条真实评论数据</p>
+                    </div>
+                    
+                    <!-- 发现卡片 -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-white p-6 rounded-xl shadow-sm card-hover">
+                            <div class="flex items-center mb-4">
+                                <div class="icon-box primary mr-4">
+                                    <i data-lucide="link-2"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-800">非对称匹配效应</h3>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-4">技术性失败场景下能力导向补救效果最优，互动性失败场景下情感导向补救更具优势。</p>
+                            <div class="p-3 rounded-lg" style="background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);">
+                                <div class="text-xs text-gray-500 mb-1">技术失败 × 能力补救</div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="h-2 rounded-full" style="width: 85%; background: linear-gradient(90deg, #667eea, #764ba2);"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-xl shadow-sm card-hover">
+                            <div class="flex items-center mb-4">
+                                <div class="icon-box warm mr-4">
+                                    <i data-lucide="scale"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-800">拟人化双刃剑</h3>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-4">高拟人化在技术性失败中提升留存，在互动性失败中反而降低留存意愿。</p>
+                            <div class="p-3 rounded-lg" style="background: linear-gradient(135deg, #fef3f2 0%, #fee2e2 100%);">
+                                <div class="flex justify-between text-xs text-gray-600">
+                                    <span class="flex items-center gap-1">
+                                        <i data-lucide="trending-up" class="w-3 h-3 text-green-500"></i>
+                                        技术失败: +17.2%
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <i data-lucide="trending-down" class="w-3 h-3 text-red-500"></i>
+                                        互动失败: -12.4%
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-xl shadow-sm card-hover">
+                            <div class="flex items-center mb-4">
+                                <div class="icon-box cool mr-4">
+                                    <i data-lucide="git-merge"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-800">双螺旋路径</h3>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-4">能力螺旋与温暖螺旋是服务失败影响消费者留存的核心心理机制。</p>
+                            <div class="p-3 rounded-lg" style="background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);">
+                                <div class="text-xs text-gray-500 mb-1">能力螺旋解释力</div>
+                                <div class="text-sm font-bold text-cyan-600">78.3%</div>
+                                <div class="text-xs text-gray-500 mt-2 mb-1">温暖螺旋解释力</div>
+                                <div class="text-sm font-bold text-cyan-600">72.5%</div>
+                            </div>
+                        </div>
                     </div>
 
-                    <button onclick="calculateTimingEffect()" class="w-full text-white py-3 rounded-lg font-semibold transition" style="background-color: #53AEDB;" onmouseover="this.style.backgroundColor='#94B8D9'" onmouseout="this.style.backgroundColor='#53AEDB'">
-                        计算补救效果
-                    </button>
-
-                    <div id="timingResult" class="mt-6 hidden">
-                        <div class="p-6 rounded-lg" style="background: linear-gradient(to right, #D0E4F2, #F2D4CE); border-left: 4px solid #53AEDB;">
-                            <div id="timingResultContent"></div>
+                    <!-- 图表区域 -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-xl shadow-sm">
+                            <h3 class="text-lg font-bold mb-4 text-gray-800 flex items-center gap-2">
+                                <i data-lucide="pie-chart" class="w-5 h-5 text-purple-500"></i>
+                                服务失败类型分布
+                            </h3>
+                            <canvas id="failureTypeChart"></canvas>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm">
+                            <h3 class="text-lg font-bold mb-4 text-gray-800 flex items-center gap-2">
+                                <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-500"></i>
+                                补救策略效果对比
+                            </h3>
+                            <canvas id="remedyEffectChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Intelligent System -->
-    <section id="system" class="py-16" style="background-color: #F9EED7;">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">智能补救决策系统</h2>
-            
-            <div class="mb-12">
-                <h3 class="text-2xl font-bold text-center mb-6 text-gray-800">TextCNN文本分类模型架构</h3>
-                <img src="architecture-diagram.svg" alt="TextCNN文本分类模型架构图" class="w-full rounded-lg shadow-lg bg-white p-4">
-                <p class="text-center text-gray-600 mt-4">基于卷积神经网络的服务失败类型识别模型，准确率达92.3%</p>
+        <!-- 系统介绍 -->
+        <section id="page-system" class="page-section">
+            <div class="py-8 px-4">
+                <div class="max-w-7xl mx-auto">
+                    <div class="text-center mb-8">
+                        <div class="icon-box soft mx-auto mb-4">
+                            <i data-lucide="layers" style="color: #667eea;"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">系统架构</h2>
+                        <p class="text-gray-600">三层智能决策架构</p>
+                    </div>
+                    
+                    <!-- 架构图 -->
+                    <!-- <div class="mb-8 bg-white p-4 rounded-xl shadow-sm">
+                        <img src="architecture-diagram.svg" alt="系统架构图" class="w-full rounded-lg">
+                    </div> -->
+
+                    <!-- 三层架构卡片 -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="arch-card" style="background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);">
+                            <div class="icon-box primary mb-4">
+                                <i data-lucide="search"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3 text-gray-800">问题识别层</h3>
+                            <p class="text-gray-600 text-sm mb-4">基于深度学习的文本分类模型，自动识别服务失败类型。</p>
+                            <ul class="text-sm text-gray-600 space-y-2">
+                                <li class="flex items-center gap-2">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i>
+                                    整体准确率: 92.30%
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i>
+                                    技术性失败识别: 97.94%
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i>
+                                    互动性失败识别: 90.44%
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="arch-card" style="background: linear-gradient(135deg, #fef3f2 0%, #fee2e2 100%);">
+                            <div class="icon-box warm mb-4">
+                                <i data-lucide="users-2"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3 text-gray-800">用户分类层</h3>
+                            <p class="text-gray-600 text-sm mb-4">基于聚类分析的用户画像模型，精准识别用户类型。</p>
+                            <ul class="text-sm text-gray-600 space-y-2">
+                                <li class="flex items-center gap-2">
+                                    <i data-lucide="user" class="w-4 h-4 text-blue-500"></i>
+                                    理性型 (22.2%)
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i data-lucide="heart" class="w-4 h-4 text-pink-500"></i>
+                                    感性型 (28.1%)
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i data-lucide="scale" class="w-4 h-4 text-purple-500"></i>
+                                    平衡型 (31.5%)
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i data-lucide="minus-circle" class="w-4 h-4 text-gray-500"></i>
+                                    低卷入型 (18.2%)
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="arch-card" style="background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);">
+                            <div class="icon-box cool mb-4">
+                                <i data-lucide="lightbulb"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3 text-gray-800">策略决策层</h3>
+                            <p class="text-gray-600 text-sm mb-4">基于贝叶斯网络的智能推荐引擎，生成最优补救策略。</p>
+                            <ul class="text-sm text-gray-600 space-y-2">
+                                <li class="flex items-center gap-2">
+                                    <i data-lucide="git-branch" class="w-4 h-4 text-cyan-500"></i>
+                                    因果推理能力
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i data-lucide="stethoscope" class="w-4 h-4 text-cyan-500"></i>
+                                    诊断推理能力
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i data-lucide="help-circle" class="w-4 h-4 text-cyan-500"></i>
+                                    反事实分析能力
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </section>
+    </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="p-6 rounded-lg card-hover" style="background: linear-gradient(to bottom right, #D0E4F2, #94B8D9);">
-                    <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style="background-color: #53AEDB;">
-                        <i data-lucide="search" class="w-6 h-6 text-white"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3 text-gray-800">算法识别层</h3>
-                    <p class="text-gray-600 mb-4">基于TextCNN的深度学习模型，实现服务失败类型的自动化识别。</p>
-                    <ul class="text-sm text-gray-600 space-y-2">
-                        <li>• 准确率: 92.30%</li>
-                        <li>• 技术性失败识别: 97.94%</li>
-                        <li>• 互动性失败识别: 90.44%</li>
-                    </ul>
-                </div>
-
-                <div class="p-6 rounded-lg card-hover" style="background: linear-gradient(to bottom right, #F2D4CE, #F2A399);">
-                    <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style="background-color: #F2A399;">
-                        <i data-lucide="users-2" class="w-6 h-6 text-white"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3 text-gray-800">用户分类层</h3>
-                    <p class="text-gray-600 mb-4">K-means聚类分析，构建四类用户画像模型。</p>
-                    <ul class="text-sm text-gray-600 space-y-2">
-                        <li>• 技术理性型 (22.2%)</li>
-                        <li>• 情感敏感型 (28.1%)</li>
-                        <li>• 平衡务实型 (31.5%)</li>
-                        <li>• 低卷入型 (18.2%)</li>
-                    </ul>
-                </div>
-
-                <div class="p-6 rounded-lg card-hover" style="background: linear-gradient(to bottom right, #D0E4F2, #F9EED7);">
-                    <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style="background-color: #94B8D9;">
-                        <i data-lucide="brain" class="w-6 h-6 text-white"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3 text-gray-800">补救决策层</h3>
-                    <p class="text-gray-600 mb-4">贝叶斯网络模型，智能推荐最优补救策略。</p>
-                    <ul class="text-sm text-gray-600 space-y-2">
-                        <li>• 因果推理</li>
-                        <li>• 诊断推理</li>
-                        <li>• 反事实分析</li>
-                    </ul>
-                </div>
-            </div>
+    <!-- 底部导航栏（移动端） -->
+    <div class="bottom-nav">
+        <div class="bottom-nav-item active" data-page="home">
+            <i data-lucide="home"></i>
+            <span>首页</span>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="py-8" style="background-color: #94B8D9;">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p style="color: rgba(255, 255, 255, 0.9);">© 2026 智能补救系统 - 时机预测、类型识别、策略推荐三位一体 | 基于双螺旋路径模型的研究成果</p>
+        <div class="bottom-nav-item" data-page="demo">
+            <i data-lucide="sparkles"></i>
+            <span>推荐</span>
         </div>
+        <div class="bottom-nav-item" data-page="timing">
+            <i data-lucide="clock"></i>
+            <span>时机</span>
+        </div>
+        <div class="bottom-nav-item" data-page="research">
+            <i data-lucide="flask-conical"></i>
+            <span>研究</span>
+        </div>
+        <div class="bottom-nav-item" data-page="system">
+            <i data-lucide="layers"></i>
+            <span>系统</span>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="py-6 text-center hidden md:block" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <p class="text-white text-sm opacity-80">© 2026 智能服务补救系统 | 基于真实数据研究</p>
     </footer>
 
     <script src="app.js"></script>
